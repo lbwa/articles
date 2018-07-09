@@ -2,7 +2,6 @@
 
 set -e
 
-yarn run ts
-yarn run gen
+yarn run compiler
 git add .
 git-cz

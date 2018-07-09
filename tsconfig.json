@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "scripts/dist",
+    "outDir": "dist",
     "target": "es5",
     "lib": [
       "es2015",
@@ -10,7 +10,8 @@
     "sourceMap": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "removeComments": true
   },
   "include": [
     "scripts/**/*"

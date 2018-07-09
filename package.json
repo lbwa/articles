@@ -12,10 +12,12 @@
   },
   "scripts": {
     "ts": "npx tsc",
-    "gen": "node scripts/index",
+    "gen": "node dist/index",
+    "compiler": "yarn run ts && yarn run gen",
     "commit": "sh scripts/commit.sh"
   },
   "devDependencies": {
+    "@types/node": "^10.5.2",
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",
     "typescript": "^2.9.2"
