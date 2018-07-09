@@ -1,0 +1,27 @@
+[
+  {
+    "name":"reactive-render",
+    "url":"https://github.com/lbwa/reactive-render",
+    "desc":"Vue.js 响应式原理及其依赖收集分析"
+  },
+  {
+    "name": "better-jsonp",
+    "url": "https://github.com/lbwa/jsonp",
+    "desc": "一个轻量化的 JSONP 实现"
+  },
+  {
+    "name": "builder-cli",
+    "url": "https://github.com/lbwa/builder-cli",
+    "desc": "一个简易前端脚手架实现"
+  },
+  {
+     "name":"vue-ssr",
+     "url":"https://github.com/lbwa/vue-ssr",
+     "desc":"一个 Vue.js 的 SSR 实现示例"
+  },
+  {
+    "name":"vue-sonar",
+    "url":"https://github.com/lbwa/vue-sonar",
+    "desc":"一个基于 Vue.js 2.5 / Vue router / Vuex 的 Web Music APP"
+  }
+]
