@@ -13,10 +13,9 @@ function readFile (target) {
       path.resolve(__dirname, `../${target}/${target}.md`),
       'utf8',
       (err, data) => {
-      if (err) reject(err)
-  
-      resolve(data)
-    })
+        err ? reject(err) : resolve(data)
+      }
+    )
   })
 }
 

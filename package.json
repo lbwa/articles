@@ -11,12 +11,14 @@
     "front-matter": "^2.3.0"
   },
   "scripts": {
+    "ts": "npx tsc",
     "gen": "node scripts/index",
     "commit": "sh scripts/commit.sh"
   },
   "devDependencies": {
     "commitizen": "^2.10.1",
-    "cz-conventional-changelog": "^2.1.0"
+    "cz-conventional-changelog": "^2.1.0",
+    "typescript": "^2.9.2"
   },
   "config": {
     "commitizen": {
