@@ -17,3 +17,7 @@ export interface initialContent {
   contentData: string
   origin: string
 }
+
+export interface contentList {
+  [path: string]: object
+}

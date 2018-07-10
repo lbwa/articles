@@ -7,14 +7,15 @@
   "author": "Bowen <mr_lbw@outlook.com>",
   "license": "CC BY-NC-SA 3.0",
   "private": true,
-  "dependencies": {
-    "front-matter": "^2.3.0"
-  },
   "scripts": {
     "ts": "npx tsc",
     "gen": "node dist/index",
-    "compiler": "yarn run ts && yarn run gen",
+    "dev": "yarn run ts && yarn run gen",
     "commit": "sh scripts/commit.sh"
+  },
+  "dependencies": {
+    "front-matter": "^2.3.0",
+    "micro": "^9.3.2"
   },
   "devDependencies": {
     "@types/node": "^10.5.2",

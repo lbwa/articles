@@ -7,7 +7,7 @@ const path = require('path')
 const readMeta = require('front-matter')
 const formatDate = require('./format-date')
 
-import { header, post, initialContent } from './types'
+import { header, post, initialContent, contentList } from './types'
 
 function readFile (target: string) {
   return new Promise((resolve, reject) => {
@@ -44,10 +44,6 @@ async function scanner (path: string) {
   })
 
   return contentPromises
-}
-
-interface contentList {
-  [path: string]: string
 }
 
 let contentList: contentList = {} // all content storage
@@ -93,7 +89,10 @@ async function parser (path: string) {
     // generate content list, saved by object
     const body: string = raw.body
 
-    contentList[origin] = body
+    contentList[origin] = {
+      origin,
+      data: body
+    }
   }
 
   return JSON.stringify(catalog)
