@@ -1,7 +1,8 @@
 {
   "name": "blog-api",
   "alias": [
-    "lbw"
+    "lbw",
+    "docs.set.sh"
   ],
   "engines": {
     "node": "^10.3.0"

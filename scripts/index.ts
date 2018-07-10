@@ -8,9 +8,9 @@ const { stringify } = JSON
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
 
-import { req, res } from './types'
+import { ServerResponse, ServerRequest } from 'http';
 
-const server = micro(async function (req: req, res: res) {
+const server = micro(async function (req: ServerRequest, res: ServerResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   res.setHeader('Content-Type', 'application/json; charset=utf-8')
