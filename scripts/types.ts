@@ -21,3 +21,12 @@ export interface initialContent {
 export interface contentList {
   [path: string]: object
 }
+
+export interface req {
+  readonly url: string
+}
+
+export interface res {
+  readonly setHeader: Function
+  readonly writeHeader: Function
+}

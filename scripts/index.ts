@@ -7,14 +7,7 @@ const { send } = micro
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
 
-interface req {
-  readonly url: string
-}
-
-interface res {
-  readonly setHeader: Function
-  readonly writeHeader: Function
-}
+import { req, res } from './types'
 
 const server = micro(async function (req: req, res: res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
