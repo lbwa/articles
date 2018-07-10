@@ -1,4 +1,4 @@
-export interface meta {
+export interface header {
   title: string
   author: string
   date: Date

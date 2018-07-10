@@ -7,7 +7,7 @@ const path = require('path')
 const readMeta = require('front-matter')
 const formatDate = require('./format-date')
 
-import { meta, post, content } from './types'
+import { header, post, content } from './types'
 
 function readFile (target: string) {
   return new Promise((resolve, reject) => {
@@ -28,25 +28,43 @@ async function scanner (path: string) {
     return /^\d+/.test(file)
   })
 
-  let result: post[] = []
+  let catalog: post[] = []
 
-  // 异步读取，加快效率 15ms ± 1ms
+  // 异步读取，加快效率
   // https://developers.google.com/web/fundamentals/primers/async-functions#_9
   // map 函数返回一个由参数函数返回值组成的数组
   // console.time('async reading')
   const contentPromise = filterFiles.map(async file => {
-    return await readFile(file)
+    let fileContent: object
+
+    try {
+      fileContent = await readFile(file)
+    } catch (err) {
+      console.error(err)
+    }
+
+    return fileContent
   })
 
   for (const content of contentPromise) {
-    const { contentData, origin } = <content>await content // extract content
-    const meta: meta = readMeta(contentData).attributes
-    const title = meta.title
-    const author = meta.author
-    const date = formatDate(meta.date)
-    const tags = meta.tags
+    let contentData: string
+    let origin: string
 
-    result.unshift({
+    try {
+      const stringContent = <content>await content
+      contentData = stringContent.contentData
+      origin = stringContent.origin
+    } catch (err) {
+      console.error(err)
+    }
+
+    const header: header = readMeta(contentData).attributes
+    const title = header.title
+    const author = header.author
+    const date = formatDate(header.date)
+    const tags = header.tags
+
+    catalog.unshift({
       to: origin, // origin.replace(/.md$/g, '')
       title,
       author,
@@ -56,7 +74,7 @@ async function scanner (path: string) {
   }
   // console.timeEnd('async reading')
 
-  // 同步读取 20ms+
+  // 同步读取
   // console.time('sync reading')
   // for (let i = 0; i < filterFiles.length; i++) {
   //   const {contentData} = <content>await readFile(filterFiles[i])
@@ -67,7 +85,7 @@ async function scanner (path: string) {
   //   const date = formatDate(meta.date)
   //   const tags = meta.tags
 
-  //   result.unshift({
+  //   catalog.unshift({
   //     to: filterFiles[i].replace(/.md$/, ''),
   //     title,
   //     author,
@@ -77,11 +95,19 @@ async function scanner (path: string) {
   // }
   // console.timeEnd('sync reading')
 
-  return JSON.stringify(result)
+  return JSON.stringify(catalog)
 }
 
 module.exports = async function writeFile (output: string, input: string) {
-  fs.writeFile(output, await scanner(input), (err: object) => {
+  let content: string
+
+  try {
+    content = await scanner(input)
+  } catch (err) {
+    console.error(err)
+  }
+
+  fs.writeFile(output, content, (err: object) => {
     err
       ? console.error(err)
       : console.log(`\n 👌  generate menu successfully in ${output} ! \n`)
