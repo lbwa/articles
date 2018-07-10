@@ -1,0 +1,9 @@
+{
+  "name": "blog-api",
+  "alias": [
+    "lbw"
+  ],
+  "engines": {
+    "node": "^10.3.0"
+  }
+}
