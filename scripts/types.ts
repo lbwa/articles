@@ -13,7 +13,7 @@ export interface post {
   tags: string[]
 }
 
-export interface content {
+export interface initialContent {
   contentData: string
   origin: string
 }
