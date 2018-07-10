@@ -1,8 +1,9 @@
 const resolve = require('path').resolve
-const generator = require('./generator')
+const { genMenu, contentList } = require('./generator')
 
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
-const contentListOutput: string = resolve(__dirname, '../list.json')
 
-generator(cwd, catalogOutput, contentListOutput)
+genMenu(cwd, catalogOutput).then(() => {
+  console.log('180329-css-bfc :', contentList['180329-css-bfc'])
+})

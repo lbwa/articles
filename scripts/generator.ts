@@ -47,13 +47,13 @@ async function scanner (path: string) {
 }
 
 interface contentList {
-  to: string
-  data: string
+  [path: string]: string
 }
+
+let contentList: contentList = {} // all content storage
 
 async function parser (path: string) {
   let catalog: post[] = []
-  let contentList: contentList[] = []
   let contentPromises
 
   try {
@@ -75,6 +75,7 @@ async function parser (path: string) {
 
     const raw = readMeta(contentData)
 
+    // generate menu, saved by JSON file
     const header: header = raw.attributes
     const title = header.title
     const author = header.author
@@ -89,41 +90,29 @@ async function parser (path: string) {
       tags
     })
 
+    // generate content list, saved by object
     const body: string = raw.body
 
-    contentList.unshift({
-      to: origin,
-      data: body
-    })
+    contentList[origin] = body
   }
 
-  return {
-    catalog,
-    contentList
-  }
+  return JSON.stringify(catalog)
 }
 
-module.exports = async function writeFile (cwd: string, catalogOutput: string, contentListOutput: string) {
-  let allData
+async function genMenu (cwd: string, catalogOutput: string) {
+  let header: string
 
   try {
-    allData = await parser(cwd)
+    header = await parser(cwd)
   } catch (err) {
     console.error(err)
   }
 
-  const catalog = JSON.stringify(allData.catalog)
-  const contentList = JSON.stringify(allData.contentList)
-
-  fs.writeFile(catalogOutput, catalog, (err: object) => {
+  fs.writeFile(catalogOutput, header, (err: object) => {
     err
       ? console.error(err)
       : console.log(`\n 👌  generate menu successfully in ${catalogOutput} ! \n`)
   })
-
-  fs.writeFile(contentListOutput, contentList, (err: object) => {
-    err
-      ? console.error(err)
-      : console.log(`\n 👌  generate content list successfully in ${contentListOutput} ! \n`)
-  })
 }
+
+module.exports = { genMenu, contentList }
