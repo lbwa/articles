@@ -12,3 +12,8 @@ export interface post {
   date: string
   tags: string[]
 }
+
+export interface content {
+  contentData: string
+  origin: string
+}
