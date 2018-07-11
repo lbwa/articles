@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "front-matter": "^2.3.0",
+    "glob": "^7.1.2",
     "micro": "^9.3.2"
   },
   "devDependencies": {

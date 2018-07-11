@@ -5,14 +5,16 @@
 const fs = require('fs')
 const path = require('path')
 const readMeta = require('front-matter')
+const glob = require('glob')
 const formatDate = require('./format-date')
 
 import { header, post, initialContent, contentList } from './types'
 
 function readFile (target: string) {
+  // target 形如 '2018/180707-pwa-fundamentals/180707-pwa-fundamentals.md'
   return new Promise((resolve, reject) => {
     fs.readFile(
-      path.resolve(__dirname, `../${target}/${target}.md`),
+      path.resolve(__dirname, `../${target}`),
       'utf8',
       (err: object, contentData: string) => {
         err ? reject(err) : resolve({origin: target, contentData})
@@ -21,44 +23,58 @@ function readFile (target: string) {
   })
 }
 
-async function scanner (path: string) {
-  // fs.readdirSync return a string[]
-  const initialFiles: string[] = fs.readdirSync(path)
-  const filterFiles: string[] = initialFiles.filter((file: string) => {
-    return /^\d+/.test(file)
+function getDocsPath (cwd: string): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    glob('*/**/*.md', {
+      cwd: cwd,
+      ignore: 'node_modules/**/*',
+      nodir: true
+    }, (err: null | object, docsPath: string[]) => {
+      err ? reject(err) : resolve(docsPath)
+    })
   })
+}
+
+async function scanner (cwd: string) {
+  let docsPath: string[] = []
+
+  try {
+    docsPath = await getDocsPath(cwd)
+  } catch (err) {
+    console.error(err)
+  }
 
   // 异步读取，加快效率
   // https://developers.google.com/web/fundamentals/primers/async-functions#_9
   // map 函数返回一个由参数函数返回值组成的数组
-  const contentPromises = filterFiles.map(async file => {
-    let fileContent: object
+  const docsPromises = docsPath.map(async (doc: string) => {
+    let docContent: object
 
     try {
-      fileContent = await readFile(file)
+      docContent = await readFile(doc)
     } catch (err) {
       console.error(err)
     }
-
-    return fileContent
+    return docContent
   })
 
-  return contentPromises
+  // 所有博文被 Promise 对象包裹，并组成一个数组
+  return docsPromises
 }
 
 let contentList: contentList = {} // all content storage
 
 async function parser (path: string) {
   let catalog: post[] = []
-  let contentPromises
+  let docsPromises
 
   try {
-    contentPromises = await scanner(path)
+    docsPromises = await scanner(path)
   } catch (err) {
     console.error(err)
   }
 
-  for (const initialContent of contentPromises) {
+  for (const initialContent of docsPromises) {
     let contentData: string
     let origin: string
 
@@ -89,7 +105,16 @@ async function parser (path: string) {
     // generate content list, saved by object
     const body: string = raw.body
 
-    contentList[origin] = {
+    const removeShortDate = origin.replace(/\/{0}(\d{6}-)+/g, '')
+    const removeInitialYear = removeShortDate.replace(/^\d{4}/, '')
+    const removeRepeat = removeInitialYear.replace(/^\/\S+\//, '')
+    const removeExtension = removeRepeat.replace(/\.md$/, '')
+
+    const docTitle: string =  removeExtension
+
+    contentList[docTitle] = {
+      // origin --> /(\d{4})?\/(\d{6}-)+/g
+      docTitle,
       origin,
       data: body
     }
