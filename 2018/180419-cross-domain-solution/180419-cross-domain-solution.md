@@ -23,7 +23,7 @@ tags:
 
 ![跨域请求][cross-domain-solution-img1]
 
-[cross-domain-solution-img1]:https://raw.githubusercontent.com/lbwa/lbwa.github.io/vue/source/images/post/Cross-domain-solution/kuayuyanzheng.PNG
+[cross-domain-solution-img1]:https://raw.githubusercontent.com/lbwa/articles/master/2018/180419-cross-domain-solution/detect-cors.png
 
 ## 解决方案
 

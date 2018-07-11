@@ -66,10 +66,10 @@ JSON 中的地址在使用时要 v-bind 绑定，才能调用JSON 中的地址�
 设置容器元素的 font-size（该属性可被后代元素继承） 设为 0 ，再将容器内的后代元素设置正常的font-size，那么各个元素之间的空白将消失
 见 preview.gif
 
-![pa](https://raw.githubusercontent.com/lbwa/lbwa.github.io/vue/source/images/post/note-for-food-app/preview.gif)
+![pa](https://raw.githubusercontent.com/lbwa/articles/master/2018/180328-summary-of-eleme-candy/preview.gif)
 
 
-若后代元素不设置 font-size ，那么后代元素的字将消失，因为在后代元素不设置 font-size 的情况下，后代元素将继承祖先元素的 font-size 
+若后代元素不设置 font-size ，那么后代元素的字将消失，因为在后代元素不设置 font-size 的情况下，后代元素将继承祖先元素的 font-size
 
 因此，容器元素和的 font-size 要与后代元素的 font-size 配合使用
 
@@ -275,7 +275,7 @@ vue 本身不能够响应（监听）已有对象中添加或删除属性的行�
 
 重要样式：
 
-```scss 
+```scss
 &.fold-enter-active, &.fold-leave-active {
   transition: all .5s;  // 定义动画过度过程中的样式
 }
@@ -436,7 +436,7 @@ auto 即为默认值时，有等式：A 的 width + margin / padding === A 的�
 
 ## 常用构建组件的技巧
 
-构建组件： 
+构建组件：
 
 1. 有哪些数据需要维护（传递）
 1. 组件结构

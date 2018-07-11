@@ -23,7 +23,7 @@ tags:
 
       ![execution-context][execution-context]
 
-[execution-context]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/execution-context/execution-context.svg
+[execution-context]:https://rawgit.com/lbwa/articles/master/2018/180507-execution-context/execution-context.svg
 
 ## Running execution context 的更替
 

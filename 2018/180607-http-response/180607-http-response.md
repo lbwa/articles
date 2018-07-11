@@ -158,7 +158,7 @@ tags:
 
   ![cache-control][img-cache-control]
 
-[img-cache-control]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/cache-control.svg
+[img-cache-control]:https://rawgit.com/lbwa/articles/master/2018/180607-http-response/cache-control.svg
 
 ### 缓存有效期
 
@@ -380,7 +380,7 @@ response.end(zlib.gzipSync(html))
 
 上图中，`420B` 则是表示传输的数据内容经过 `server` 的编码后，传输时的大小。它的大小与内容的实际编码方式有关，即 `Content-Encoding` 响应首部。`476B` 为数据内容在 `client` 端解压后的大小，除非内容变化，否则该值不变。
 
-[content-encoding]:https://raw.githubusercontent.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/content-encoding.png
+[content-encoding]:https://raw.githubusercontent.com/lbwa/articles/master/2018/180607-http-response/content-encoding.png
 
 ## Content-Language
 

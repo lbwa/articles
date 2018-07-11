@@ -13,7 +13,7 @@ tags:
 
   ![http-tcp][http-tcp]
 
-[http-tcp]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/http-tcp.svg
+[http-tcp]:https://rawgit.com/lbwa/articles/master/2018/180606-http-protocol/http-tcp.svg
 
 - `HTTP 1.0` 时，在 `HTTP` 请求创建时，同样会创建一个 `TCP` 通道用于传输数据。在服务端响应请求后，`TCP` 通道就会关闭（非常驻）。
 
@@ -23,7 +23,7 @@ tags:
 
 - `HTTP 2` 可并发请求，那么在保持 `TCP` 通道开启时，相同用户多次对同一服务器的并发请求可共用一个 `TCP` 通道。
 
-    - `HTTP 2` 正在逐步推广中。 
+    - `HTTP 2` 正在逐步推广中。
 
 ### 三次握手
 
@@ -72,9 +72,9 @@ tags:
       - `80` 主机端口，默认为 `80`。每个物理主机端口都存放着不同的 web 服务。
 
       - `path` 路由。
-      
+
           1. `/` 表示当前 `web` 服务的根目录，而不是主机的根目录。
-          
+
           2. `path` 路径默认情况下为 `web` 服务器下数据存放的路径。当数据库独立时，那么 `path` 仅表示数据的 ***存放地址***，并不能表示该数据在服务器磁盘上的路径。
 
           3. 故推荐在程序内部鉴别数据，而不是通过 URL 鉴别数据。
@@ -95,7 +95,7 @@ tags:
 
 ![http-bw][http-bw]
 
-[http-bw]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/http-bw.svg
+[http-bw]:https://rawgit.com/lbwa/articles/master/2018/180606-http-protocol/http-bw.svg
 
 ## HTTP 方法
 
@@ -127,7 +127,7 @@ tags:
 
 能够发起 HTTP 请求，并能够接收返回数据的客户端都可称为 HTTP 客户端。如 `curl`、`XMLHttpRequest`、浏览器等。
 
-除了在浏览器中可以观察 HTTP 请求的细节外，亦可使用 `curl` 命令行工具来观察。 
+除了在浏览器中可以观察 HTTP 请求的细节外，亦可使用 `curl` 命令行工具来观察。
 
 ```powershell
 # -v 表示显示报文信息
@@ -288,7 +288,7 @@ server {
   listen      80;
   # 监听的 URL，即用户输入的 URL
   server_name test.com;
-  
+
   # 转发的目标地址
   location / {
     # 1. 代理层接受到原始请求后，将发起一个新的请求至代理路径。依据 HTTP 原则，该新的请
@@ -317,7 +317,7 @@ proxy_cache_path cache levels=1:2 keys_zone=my_cache:10m; # 2 级目录，内存
 server {
   listen      80;
   server_name test.com;
-  
+
   location / {
     proxy_cache my_cache; # 根据名字 my_caches 配置缓存存储的区域
     proxy_pass http://127.0.0.1:8800;
@@ -393,7 +393,7 @@ server {
 
 [content-negotiation]:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
 
-[https-principle]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/https-principle.svg
+[https-principle]:https://rawgit.com/lbwa/articles/master/2018/180606-http-protocol/https-principle.svg
 
 ### 部署
 

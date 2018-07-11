@@ -73,11 +73,11 @@ tags:
 
 上图中经历过 `HTTP` 三次握手的初始化请求的 `waterfall` 中都有一栏桔黄色条目 `Initial connection`，表示 `三次握手` 所经历的时间。而经过复用 `TCP` 通道的请求时没有这一栏的，即不会经过 `三次握手`。
 
-[waterfall1]:https://raw.githubusercontent.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/waterfall-integrity1.png
+[waterfall1]:https://raw.githubusercontent.com/lbwa/articles/master/2018/180608-http-protocol/waterfall-integrity1.png
 
-[waterfall2]:https://raw.githubusercontent.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/waterfall-integrity2.png
+[waterfall2]:https://raw.githubusercontent.com/lbwa/articles/master/2018/180608-http-protocol/waterfall-integrity2.png
 
-[initial]:https://raw.githubusercontent.com/lbwa/lbwa.github.io/vue/source/images/post/http-protocol/waterfall-initial.png
+[initial]:https://raw.githubusercontent.com/lbwa/articles/master/2018/180608-http-protocol/waterfall-initial.png
 
 ## Accept/内容协商
 

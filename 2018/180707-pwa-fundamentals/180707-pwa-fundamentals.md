@@ -64,7 +64,7 @@ tags:
 
 `Service Worker` 的生命周期完全独立于网页。`Service Worker` 在第一次打开应用页面界面时， 在页面的 JS 脚本中注册。（[Google Developers][sw-lifecycle-google docs]，[MDN][sw-api-mdn]）
 
-![sw-lifecycle](https://raw.githubusercontent.com/lbwa/articles/master/180707-pwa-fundamentals/sw-lifecycle.png)
+![sw-lifecycle](https://raw.githubusercontent.com/lbwa/articles/master/2018/180707-pwa-fundamentals/sw-lifecycle.png)
 
 ### Install event
 
@@ -183,11 +183,11 @@ self.addEventListener('fetch', evt => {
 })
 ```
 
-![sw-fetch](https://raw.githubusercontent.com/lbwa/articles/master/180707-pwa-fundamentals/sw-fetch.png)
+![sw-fetch](https://raw.githubusercontent.com/lbwa/articles/master/2018/180707-pwa-fundamentals/sw-fetch.png)
 
 当 `Cache storage` 中不存在指定 `cacheName` 的 `cache` 容器时，将发起网络请求，最终将缓存新的 `App shell` 于指定的 `cache` 容器中。
 
-![sw-offline](https://raw.githubusercontent.com/lbwa/articles/master/180707-pwa-fundamentals/sw-offline.png)
+![sw-offline](https://raw.githubusercontent.com/lbwa/articles/master/2018/180707-pwa-fundamentals/sw-offline.png)
 
 `Service Worker` 存在指定的 `App shell` 时，将从指定的 `cache` 容器中读取。
 

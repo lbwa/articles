@@ -168,7 +168,7 @@ truck instanceof Truck // true
 - 优势
 
     1. 以一个基础结构创建无限个新的结构相似的实例，解决了创建相似对象的问题。
-    
+
     2. 以一个工厂类封装可能被复用的操作，避免重复代码。
 
     3. 解耦功能接口（即具体类的实例）与调用者。通过工厂实例将二者联系。
@@ -176,7 +176,7 @@ truck instanceof Truck // true
 - 弊端
 
     1. 每次增加、删除、修改功能，都要去修改具体类（可以是抽象类的子类）和工厂类（违背遵循 `开放封闭原则`）。若是增加功能，即在工厂内部添加新的原型方法，那么在一定程度上增加了不必要的应用复杂度。
-        
+
         - 除非创建结构相似的对象并提供一个接口是代码设计的目标（指上文的工厂模式适用场景，如以抽象化功能为目标），否则都应该显式地使用构造函数来创建对象。这样可以避免不必要的性能开销（`unnecessary overhead`）。
 
     2. 基于创建对象的行为通过接口被抽象化这一事实，那么这可能会为单元测试带来一些困难（因为外部无法感知内部实现）。至于有多困难取决于被抽象化的行为有多复杂。
@@ -498,7 +498,7 @@ const customModule = (function () {
 - 优势
 
     1. 基于面向对象编程使得功能逻辑更为清晰。
-    
+
     2. 保护了模块内部变量，该变量只能通过公有方法修改，无法通过模块外部修改。
 
 - 劣势
@@ -765,7 +765,7 @@ sub.removeObserver(obs)
 
 ![observer-pattern][observer-pattern]
 
-[observer-pattern]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/js-design-pattern/observer-pattern.svg
+[observer-pattern]:https://rawgit.com/lbwa/articles/master/2018/180612-js-design-pattern/observer-pattern.svg
 
 ## 发布/订阅模式
 
@@ -847,7 +847,7 @@ pub.publish('index') // I'm from index
 
 ![publish-subscribe][publish-subscribe]
 
-[publish-subscribe]:https://rawgit.com/lbwa/lbwa.github.io/vue/source/images/post/js-design-pattern/publish-subscribe.svg
+[publish-subscribe]:https://rawgit.com/lbwa/articles/master/2018/180612-js-design-pattern/publish-subscribe.svg
 
 ### 实际应用
 
@@ -880,13 +880,13 @@ eventBus.$off('goPublish', handler) // unsubscribe
 1. 观察者模式
 
     1. 观察者模式要求希望接受通知的 `观察者对象` 必须订阅它所感兴趣的发起事件的 `主体对象`（`the object firing the event(the subject)`） 。
-    
+
     2. 观察者必须 ***直接*** 订阅主体对象，此举导致二者形成 ***耦合***。主体对象广播时，所有观察者中回调都将被 ***同步*** 执行。
 
 2. 发布/订阅模式
 
     1. 二者最大的差异是 `发布/订阅模式` 建立了一个 `主题/事件通道`。该通道是位于 `订阅者 subscribers`（希望接受通知的对象，`Observer`）和 `发布者 publisher`（发布通知/事件的对象，`Subject`）之间，作为二者的通信桥梁。
-    
+
     2. 该事件系统（`主题/事件通道`）允许通过应用中包含自定义参数值的特殊事件来 ***区分订阅者***。这样做的目的是 ***选出*** 特定的订阅者用于单独执行回调（可形成一个消息队列），即 ***解耦*** 了订阅者和发布者之间的依赖关系（上文 1.2）。
 
     3. 观察者是通过 `主题/事件通道` ***间接*** 订阅主体对象。
@@ -990,5 +990,5 @@ const addListener = function (el, evt, callback) {
 - 弊端
 
     1. 性能问题。在 `Facade Pattern` 模块被确定时，即其内部实现已确定，那么不论我们传入何种参数，其内部总会实现其所有判断逻辑（如有）。那么这就可能带来一些隐性的性能消耗。
-    
+
         - 比如使用了 `Facade Pattern` 的公共接口 `$(el)`（其内部通过 `document.querySelector` 实现查找元素）对比 `document.getElementById` 将有更高的性能损耗。因为 `document.getElementById` 只专注于元素 id 查找，而 `document.querySelector` 接受任何元素选择器，那么这其中执行判断逻辑（判断以何种方式查找元素）就会带来性能损耗。
