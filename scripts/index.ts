@@ -1,6 +1,7 @@
 const resolve = require('path').resolve
 const micro = require('micro')
 const zlib = require('zlib')
+const fs = require('fs')
 const { genMenu, contentList } = require('./generator')
 
 const { send } = micro
@@ -24,9 +25,17 @@ const server = micro(async function (req: ServerRequest, res: ServerResponse) {
   //   || req.socket.remoteAddress
   // console.log('origin :', origin)
 
-  if (url === '/') return send(res, 200, zlib.gzipSync(stringify({
-    date: new Date()
-  })))
+  if (url === '/') {
+    return send(res, 200, zlib.gzipSync(stringify({
+      date: new Date()
+    })))
+  }
+
+  if (url === '/menu.json') {
+    return send(res, 200, zlib.gzipSync(
+      fs.readFileSync(resolve(__dirname, '../menu.json'), 'utf8')
+    ))
+  }
 
   let path = url.slice(1) // delete `/` character in the beginning
   if (!contentList[path]) {
@@ -38,6 +47,10 @@ const server = micro(async function (req: ServerRequest, res: ServerResponse) {
 })
 
 genMenu(cwd, catalogOutput).then(() => {
+  // 在执行脚本时传入指定参数将跳过建立 local server
+  // 主要用于部署前生成 menu.json
+  if (process.argv[2] === 'skip') return
+
   const port = process.env.PORT || 8800
   server.listen(port)
   console.info(`\n Server listening on http://localhost:${port} \n`)

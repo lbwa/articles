@@ -9,7 +9,8 @@
   },
   "files": [
     "2018",
-    "dist"
+    "dist",
+    "menu.json"
   ],
   "env": {
     "NODE_ENV": "production"

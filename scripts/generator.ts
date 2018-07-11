@@ -94,8 +94,14 @@ async function parser (path: string) {
     const date = formatDate(header.date)
     const tags = header.tags
 
+    // filter string
+    const removeShortDate = origin.replace(/\/{0}(\d{6}-)+/g, '')
+    const removeInitialYear = removeShortDate.replace(/^\d{4}/, '')
+    const removeRepeat = removeInitialYear.replace(/^\/\S+\//, '')
+    const removeExtension = removeRepeat.replace(/\.md$/, '')
+
     catalog.unshift({
-      to: origin, // origin.replace(/.md$/g, '')
+      to: removeExtension,
       title,
       author,
       date,
@@ -104,12 +110,6 @@ async function parser (path: string) {
 
     // generate content list, saved by object
     const body: string = raw.body
-
-    const removeShortDate = origin.replace(/\/{0}(\d{6}-)+/g, '')
-    const removeInitialYear = removeShortDate.replace(/^\d{4}/, '')
-    const removeRepeat = removeInitialYear.replace(/^\/\S+\//, '')
-    const removeExtension = removeRepeat.replace(/\.md$/, '')
-
     const docTitle: string =  removeExtension
 
     contentList[docTitle] = {
@@ -131,6 +131,9 @@ async function genMenu (cwd: string, catalogOutput: string) {
   } catch (err) {
     console.error(err)
   }
+
+  // 避免部署时再次写入，因为 now.sh server 不支持部署时文件写入
+  if (process.env.NODE_ENV === 'production') return
 
   fs.writeFile(catalogOutput, header, (err: object) => {
     err
