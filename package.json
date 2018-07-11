@@ -9,11 +9,11 @@
   "private": true,
   "scripts": {
     "ts": "npx tsc",
-    "gen": "node dist/index",
-    "dev": "yarn run ts && yarn run gen",
-    "start": "yarn run dev",
+    "server": "node dist/index",
+    "dev": "yarn run ts && yarn run server",
+    "start": "yarn run server",
     "commit": "sh scripts/commit.sh",
-    "now": "now && now alias"
+    "now": "sh scripts/prod.sh"
   },
   "dependencies": {
     "front-matter": "^2.3.0",
