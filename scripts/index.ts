@@ -8,7 +8,7 @@ const { stringify } = JSON
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
 
-import { ServerResponse, ServerRequest } from 'http';
+import { ServerResponse, ServerRequest } from 'http'
 
 const server = micro(async function (req: ServerRequest, res: ServerResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -18,6 +18,11 @@ const server = micro(async function (req: ServerRequest, res: ServerResponse) {
 
   const url = req.url
   console.log(`Request address is: ${url}`)
+
+  // const origin = req.headers['x-forwarded-for']
+  //   || req.connection.remoteAddress
+  //   || req.socket.remoteAddress
+  // console.log('origin :', origin)
 
   if (url === '/') return send(res, 200, zlib.gzipSync(stringify({
     date: new Date()
@@ -35,5 +40,5 @@ const server = micro(async function (req: ServerRequest, res: ServerResponse) {
 genMenu(cwd, catalogOutput).then(() => {
   const port = process.env.PORT || 8800
   server.listen(port)
-  console.info(`\n Server listening on http://localhost:${port} \n`);
+  console.info(`\n Server listening on http://localhost:${port} \n`)
 })

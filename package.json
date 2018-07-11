@@ -13,7 +13,7 @@
     "dev": "yarn run ts && yarn run gen",
     "start": "yarn run dev",
     "commit": "sh scripts/commit.sh",
-    "now": "now alias"
+    "now": "now && now alias"
   },
   "dependencies": {
     "front-matter": "^2.3.0",
