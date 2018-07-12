@@ -11,6 +11,7 @@
     "ts": "npx tsc",
     "server": "node dist/index",
     "dev": "yarn run ts && yarn run server",
+    "compiler" : "yarn run ts && node dist/index skip",
     "start": "yarn run server",
     "commit": "sh scripts/commit.sh",
     "now": "sh scripts/prod.sh"

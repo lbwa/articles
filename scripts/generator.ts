@@ -95,6 +95,7 @@ async function parser (path: string) {
     const tags = header.tags
 
     // filter string
+    // origin --> /(\d{4})?\/(\d{6}-)+/g
     const removeShortDate = origin.replace(/\/{0}(\d{6}-)+/g, '')
     const removeInitialYear = removeShortDate.replace(/^\d{4}/, '')
     const removeRepeat = removeInitialYear.replace(/^\/\S+\//, '')
@@ -110,12 +111,15 @@ async function parser (path: string) {
 
     // generate content list, saved by object
     const body: string = raw.body
-    const docTitle: string =  removeExtension
+    const filter: string =  removeExtension
 
-    contentList[docTitle] = {
-      // origin --> /(\d{4})?\/(\d{6}-)+/g
-      docTitle,
-      origin,
+    contentList[filter] = {
+      // origin, // this is full path according to root path
+      filter,
+      title,
+      author,
+      date,
+      tags,
       data: body
     }
   }

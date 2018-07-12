@@ -2,7 +2,6 @@
 
 set -e
 
-yarn run ts
-node dist/index skip
+yarn run compiler
 now
 now alias

@@ -37,6 +37,12 @@ const server = micro(async function (req: ServerRequest, res: ServerResponse) {
     ))
   }
 
+  if (url === '/project.json') {
+    return send(res, 200, zlib.gzipSync(
+      fs.readFileSync(resolve(__dirname, '../projects/projects.json'), 'utf8')
+    ))
+  }
+
   let path = url.slice(1) // delete `/` character in the beginning
   if (!contentList[path]) {
     return send(res, 404, zlib.gzipSync('File not found'))
