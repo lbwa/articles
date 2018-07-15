@@ -102,6 +102,7 @@ async function parser (path: string) {
     const removeExtension = removeRepeat.replace(/\.md$/, '')
 
     catalog.unshift({
+      errno: 0,
       to: removeExtension,
       title,
       author,
@@ -111,11 +112,12 @@ async function parser (path: string) {
 
     // generate content list, saved by object
     const body: string = raw.body
-    const filter: string =  removeExtension
+    const to: string =  removeExtension
 
-    contentList[filter] = {
+    contentList[to] = {
       // origin, // this is full path according to root path
-      filter,
+      errno: 0,
+      to,
       title,
       author,
       date,

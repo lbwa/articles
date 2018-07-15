@@ -9,9 +9,9 @@
   "private": true,
   "scripts": {
     "ts": "npx tsc",
-    "server": "node dist/index",
+    "server": "node dist/server",
     "dev": "yarn run ts && yarn run server",
-    "compiler" : "yarn run ts && node dist/index skip",
+    "compiler": "yarn run ts && node dist/server skip",
     "start": "yarn run server",
     "commit": "sh scripts/commit.sh",
     "now": "sh scripts/prod.sh"
@@ -19,9 +19,16 @@
   "dependencies": {
     "front-matter": "^2.3.0",
     "glob": "^7.1.2",
-    "micro": "^9.3.2"
+    "koa": "^2.5.2",
+    "koa-compress": "^3.0.0",
+    "koa-router": "^7.4.0",
+    "koa-send": "^5.0.0"
   },
   "devDependencies": {
+    "@types/koa": "^2.0.46",
+    "@types/koa-compress": "^2.0.8",
+    "@types/koa-router": "^7.0.30",
+    "@types/koa-send": "^4.1.1",
     "@types/node": "^10.5.2",
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",

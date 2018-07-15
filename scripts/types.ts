@@ -6,6 +6,7 @@ export interface header {
 }
 
 export interface post {
+  errno: number
   to: string
   title: string
   author: string
@@ -18,6 +19,10 @@ export interface initialContent {
   origin: string
 }
 
+interface contentItem extends post {
+  data: string
+}
+
 export interface contentList {
-  [path: string]: object
+  [path: string]: contentItem
 }
