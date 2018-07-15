@@ -23,10 +23,6 @@ app.use(async (ctx: Koa.Context, next: Function) => {
   }
 })
 
-app.use(compress({
-  threshold: 0
-}))
-
 app.use(async (ctx: Koa.Context, next: Function) => {
   ctx.set({
     // 'Access-Control-Allow-Origin': 'https://set.sh',
@@ -68,7 +64,11 @@ router
     ctx.body = contentList[url]
   })
 
+// Make sure correct sequence
 app
+  .use(compress({
+    threshold: 0
+  }))
   .use(router.routes())
   .use(router.allowedMethods())
 
