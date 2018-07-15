@@ -8,7 +8,11 @@ const { genMenu, contentList } = require('./generator')
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
 
-const PORT = process.argv[2] || 8800
+console.log('process.env.NODE_ENV :', process.env.NODE_ENV)
+
+const isDev = process.env.NODE_ENV === 'development'
+const HOST = process.env.HOST || '0.0.0.0'
+const PORT = process.env.PORT || process.argv[2] || 8800
 const stringify = JSON.stringify.bind(JSON)
 const app = new Koa()
 const router = new Router()
@@ -24,6 +28,12 @@ app.use(async (ctx: Koa.Context, next: Function) => {
 })
 
 app.use(async (ctx: Koa.Context, next: Function) => {
+  // Don't set CORS response header under development mode
+  if (isDev) {
+    await next()
+    return
+  }
+
   let origin: string
   // white list, `Access-Control-Allow-Origin` only receive 1 value
   if (ctx.origin === 'https://lbwa.github.io') {
@@ -86,6 +96,6 @@ genMenu(cwd, catalogOutput).then(() => {
   if (process.argv[2] === 'skip') return
 
   app.listen(PORT, () => {
-    console.log(`\n Server is listening on http://localhost:${PORT}\n`)
+    console.log(`\n Server is listening on http://${HOST}:${PORT}\n`)
   })
 })
