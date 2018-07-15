@@ -24,10 +24,18 @@ app.use(async (ctx: Koa.Context, next: Function) => {
 })
 
 app.use(async (ctx: Koa.Context, next: Function) => {
+  let origin: string
+  // white list, `Access-Control-Allow-Origin` only receive 1 value
+  if (ctx.origin === 'https://lbwa.github.io') {
+    origin = ctx.origin
+  } else {
+    origin = 'https://set.sh'
+  }
+
   ctx.set({
-    // 'Access-Control-Allow-Origin': 'https://set.sh',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': `${origin}`,
     'Access-Control-Allow-Methods': 'GET,POST',
+    'vary': 'origin'
   })
   await next()
 })
