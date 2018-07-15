@@ -23,7 +23,7 @@ tags:
 
 [access-control-allow-origin]:https://fetch.spec.whatwg.org/#http-access-control-allow-origin
 
-[客户端跨域解决方案]:http://lbwa.github.io/blog/writings/180419-cross-domain-solution/
+[客户端跨域解决方案]:http://lbwa.github.io/blog/writings/cross-domain-solution/
 
 ## Access-Control-Allow-Headers
 
@@ -119,7 +119,7 @@ tags:
 
 [access-control-allow-headers]:https://fetch.spec.whatwg.org/#http-access-control-allow-headers
 
-[extension-cross-domain-solution]:https://lbwa.github.io//blog/writings/180419-cross-domain-solution/#对跨域的基本理解
+[extension-cross-domain-solution]:https://lbwa.github.io//blog/writings/cross-domain-solution/#对跨域的基本理解
 
 ## Access-Control-Allow-Methods
 
@@ -277,7 +277,7 @@ tags:
 
 注：不推荐再使用 `Cookie` 作用为本地存储介质，推荐使用 `localStorage`、`sessionStorage`、`IndexedDB` 代替。 因为每次请求时，在没有禁用 `Cookie` 的情况下都会携带 `Cookie` 请求首部传输至 `server`。如果使用了，将会带来额外的性能开销，尤其是在移动端下。
 
-[cookie-request-header]:https://lbwa.github.io/blog/writings/180608-http-request/#cookie
+[cookie-request-header]:https://lbwa.github.io/blog/writings/http-request/#cookie
 
 ### Cookie 属性
 
@@ -327,7 +327,7 @@ tags:
 
 更多信息，查看本文 `HTTP 请求首部`[章节 - Connection][http-request-header]。
 
-[http-request-header]:https://lbwa.github.io/blog/writings/180608-http-request/#connection-长连接
+[http-request-header]:https://lbwa.github.io/blog/writings/http-request/#connection-长连接
 
 ## Content-Type/内容协商
 

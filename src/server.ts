@@ -29,6 +29,7 @@ app.use(compress({
 
 app.use(async (ctx: Koa.Context, next: Function) => {
   ctx.set({
+    // 'Access-Control-Allow-Origin': 'https://set.sh',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,POST',
   })

@@ -15,56 +15,54 @@ tags:
 
 存在两种 `event loops`（[W3C][event loops]），即一种在 `browsing context` 下的事件循环，一种是在 `web workers` 下的循环。本文讨论在 `browsing context` 下的事件循环。
 
-[event-loop-blog]:https://lbwa.github.io/blog/writings/180308-event-loop/
+[event loops]:https://www.w3.org/TR/html5/webappapis.html#event-loop
 
 ## 事件循环定义
 
 依据标准中对进程模型的流程描述（[来源][processing-model]）可得出，在完成一个宏任务，并清空因宏任务产生的微任务队列时，称之为一个事件循环。
 
-[event loops]:https://www.w3.org/TR/html5/webappapis.html#event-loop
-
 ## 任务源
 
 - 宏任务（macrotask）：
-    
+
     1. script
-    
+
         - 整体代码（[来源][ECMA-Script-records]），即代码执行的基准执行上下文（[拓展阅读][post-execution-context]）
 
         - 该宏任务的目的在于，将整体代码段（或理解为模块）推入执行上下文栈（`execution context stack`）中。
-        
+
             - 执行上下文栈初始会设置 `script` 为 `当前正在运行执行上下文`（`running execution context`），这期间可能因执行而创建新的执行上下文，那么就会依据模块内的代码不断的设置 **当前正在运行执行上下文**（`running execution context`），这样模块内的代码就会依次得以执行（此处主要是[执行上下文][post-execution-context] 中 `Running execution context 的更替` 的实际应用）。
-            
+
             - 比如设置一些事件监听程序，一些声明，执行一些初始任务。在执行完成该任务时，会建立词法作用域等一系列相关运行参数。
-    
+
     2. setTimeout，setInterval，setImmediate（服务端 API）
-    
+
     3. I/O
-    
+
         - 可拓展至 Web API（[来源][generic-task-sources]）：
-        
+
             1. DOM 操作
 
             2. 网络任务
 
                 - Ajax 请求
-            
+
             3. history traversal
 
                 - history.back()
-            
+
             4. 用户交互
 
                 - 其中包括常见 DOM2（`addEventListener`）和 DOM0（`onHandle`）级**事件监听回调函数**。如 `click` 事件回调函数等。
 
                 - 特别地，事件需要冒泡到 `document` 对象之后并且事件回调执行**完成后**，才算该宏任务执行完成。否则一直存在于执行上下文栈中，等待事件冒泡并事件回调完成（来源：Jake Archibald blog - [level 1 boss fight][jake-blog]）。
-    
+
     - **UI rendering**
 
 - 微任务（microtask）:
 
     1. process.nextTick（[Node.js][process.nextTick]）
-    
+
     2. Promise 原型方法（即 `then`、`catch`、`finally`）中被调用的回调函数
 
     3. MutationObserver（[DOM Standard][mutation-observer]）
@@ -88,7 +86,7 @@ tags:
     - solitary callback：Promise 原型的原型方法，即 `then`、`catch`、`finally` 能够调用单独的回调函数的方法。
 
     - compound microtask：
-    
+
         1. MutationObserver（[DOM Standard - 4.3.2 步骤 5][mutation-observer]）
 
         2. process.nextTick（Only for [Node.js][process.nextTick]）
@@ -130,7 +128,7 @@ tags:
 - 每个事件循环都有一个 `当前执行中的任务`（`currently running task`），用于轮询队列中的任务（`handle reentrancy`）。
 
 - 每个事件循环都有一个 `已执行 microtask 检查点标志`（`performing a microtask checkpoint flag`）（初始值一定为 false）表示已经执行了 `microtask` 检查点，用于阻止执行 `microtask checkpoint` 算法的可重入调用。
-    
+
     1. 可重入调用（[reentrant invocation][reentrant-invocation]）是指，算法在执行过程中意外中断时，在当前调用未完成的情况下被再次从头开始执行。一旦可重入执行完成，上一次被中断的调用将会恢复执行。
 
     2. 设置该检查点的原因是：
@@ -148,7 +146,7 @@ tags:
 （[来源][processing-model]）
 
 1. 在 `browsing context` 事件循环的情况下（与第 8 步并列），选择当前 `task queue` 中**最早**加入的 task。如果没有任务被选中（即当前 `task queue` 为空），那么直接跳转到第 6 步 `Microtasks`
-    
+
     - 如 `Ajax` 请求返回数据时，若当前 `task queue` 为空时，将直接跳转执行回调函数微任务。
 
 2. 设置当前事件循环的 `当前执行中的任务` 为第 1 步被选出的 task。
@@ -180,7 +178,7 @@ tags:
             - **重点**：为在一个事件循环中，总是要**清空**当前事件循环中的微任务队列**才会进行重渲染**（`Vue.js` 的 DOM 更新原理）。
 
         8. `Done`：对于每一个 `responsible event loop` 是当前事件循环的环境设置对象（`environment setting object`），向它（环境设置对象）告知关于 `rejected` 状态的 `Promise` 对象的信息。
-        
+
             - 个人理解为触发浏览器 `uncaught` 事件，并抛出 `unhandled promise rejections` 错误（[W3C][unhandled-promise-rejections]）。
 
             - 此步骤主要是向开发者告知存在未被捕获的 `rejected` 状态的 `Promise`。

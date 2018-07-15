@@ -39,7 +39,7 @@ tags:
 
 [点我，查看我的另一篇博文][cross-domain-origin]
 
-[cross-domain-origin]:https://lbwa.github.io/blog/writings/180419-cross-domain-solution/
+[cross-domain-origin]:https://lbwa.github.io/blog/writings/cross-domain-solution/
 
 # 基础模块通过 npm 下载
 
@@ -71,7 +71,7 @@ setTimeout 是 this.$nextTick 的一种实现，nextTick 本质上是利用 [事
 
 [vuenexttickshixian]:https://mp.weixin.qq.com/s/mCcW4OYj3p3471ghMBylBw
 
-[eventloop]:https://lbwa.github.io/blog/writings/180308-event-loop/
+[eventloop]:https://lbwa.github.io/blog/writings/event-loop/
 
 >事实上，vue在2.5版本中已经删去了MutationObserver相关的代码，因为它是HTML5新增的特性，在 iOS 上尚有bug。
 
@@ -106,7 +106,7 @@ setTimeout 是 this.$nextTick 的一种实现，nextTick 本质上是利用 [事
   enable () {
     this.scroll && this.scroll.enable()
   },
-  
+
   disable () {
     this.scroll && this.scroll.disable()
   },
@@ -264,7 +264,7 @@ _scrollTo (index) {
 
 ```js
 _scrollTo (index) {
-  // ... 
+  // ...
   this.$refs.list.scrollToElement(this.$refs.group[index], 0) // 调用子组件方法跳转至锚点, 0表示动画时间
 },
 ```
@@ -458,7 +458,7 @@ selectedItem (song, index) {
 ```
 子组件（扩展为基础组件）中派发 select 事件，传递点击事件后产生的载荷 song 和 index，此时，子组件（扩展为基础组件） base-song-list 并不知道这里的载荷 song 和 index 接下来将被如何使用，以及会不会使用，它的职责**只是**提供他所能够提供的数据 song 和 index。这里的一个思维就是：不要以派发事件 select 之后如何使用数据来定义子组件（扩展为基础组件） base-song-list 传递数据的这一行为，如何使用数据并不是子组件 base-song-list 的职责
 
-```js 
+```js
 // parts-music-list 组件中
 // template
 @select="selectedSong"
@@ -611,7 +611,7 @@ computed: {
 
 ### 改变样式
 
-```js 
+```js
 methods: {
   // ...
   _offset (length) { // 修改当前显示进度的样式
@@ -955,7 +955,7 @@ export const insertSong = ({ commit, state }, song) => {
 }
 ```
 
-浅复制数组的几种方法： 
+浅复制数组的几种方法：
 
 1. 拓展运算符
 1. concat()
