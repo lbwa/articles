@@ -27,13 +27,21 @@ app.use(compress({
   threshold: 0
 }))
 
+app.use(async (ctx: Koa.Context, next: Function) => {
+  ctx.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,POST',
+  })
+  await next()
+})
+
 router
-  .get('/menu.json', async(ctx: Koa.Context, next: Function) => {
+  .get('/menu', async(ctx: Koa.Context, next: Function) => {
     await send(ctx, './menu.json', {
       root: resolve(__dirname, '../')
     })
   })
-  .get('/projects.json', async(ctx: Koa.Context, next: Function) => {
+  .get('/projects', async(ctx: Koa.Context, next: Function) => {
     await send(ctx, './projects.json', {
       root: resolve(__dirname, '../projects')
     })
@@ -55,6 +63,7 @@ router
       })
       return
     }
+
     ctx.body = contentList[url]
   })
 
