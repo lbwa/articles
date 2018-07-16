@@ -93,6 +93,9 @@ app
 genMenu(cwd, catalogOutput).then(() => {
   // 在执行脚本时传入指定参数将跳过建立 local server
   // 主要用于部署前生成 menu.json
+  // ! notice: `now scale app-name.now.sh sfo1 1`, prevent app sleep
+  // ! It's `sfo1`, not `sfo`. Usage is wrong. https://zeit.co/blog/scale
+  // ! https://github.com/zeit/now-cli/issues/146#issuecomment-373925793
   if (process.argv[2] === 'skip') return
 
   app.listen(PORT, () => {
