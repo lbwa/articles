@@ -139,6 +139,7 @@ async function genMenu (cwd: string, catalogOutput: string) {
   }
 
   // 避免部署时再次写入，因为 now.sh server 不支持部署时文件写入
+  // now.json defined process.env.NODE_ENV that is `production`
   if (process.env.NODE_ENV === 'production') return
 
   fs.writeFile(catalogOutput, header, (err: object) => {

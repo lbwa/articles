@@ -8,8 +8,12 @@ const { genMenu, contentList } = require('./generator')
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
 
-console.log('process.env.NODE_ENV :', process.env.NODE_ENV)
+console.log('\nEnvironment: ', process.env.NODE_ENV)
 
+const whiteList = [
+  'https://lbwa.github.io',
+  'https://set.sh'
+]
 const isDev = process.env.NODE_ENV === 'development'
 const HOST = process.env.HOST || '127.0.0.1'
 const PORT = process.env.PORT || process.argv[2] || 8800
@@ -28,18 +32,14 @@ app.use(async (ctx: Koa.Context, next: Function) => {
 })
 
 app.use(async (ctx: Koa.Context, next: Function) => {
-  // Don't set CORS response header under development mode
-  if (isDev) {
-    await next()
-    return
-  }
-
   let origin: string
-  // white list, `Access-Control-Allow-Origin` only receive 1 value
-  if (ctx.origin === 'https://lbwa.github.io') {
-    origin = ctx.origin
+
+  if (isDev) {
+    origin = '*'
   } else {
-    origin = 'https://set.sh'
+    // white list, `Access-Control-Allow-Origin` only receive 1 value
+    const index = whiteList.indexOf(ctx.origin)
+    origin = index > -1 ? whiteList[index] : 'https://set.sh'
   }
 
   ctx.set({
