@@ -11,7 +11,7 @@ const catalogOutput: string = resolve(__dirname, '../menu.json')
 console.log('process.env.NODE_ENV :', process.env.NODE_ENV)
 
 const isDev = process.env.NODE_ENV === 'development'
-const HOST = process.env.HOST || '0.0.0.0'
+const HOST = process.env.HOST || '127.0.0.1'
 const PORT = process.env.PORT || process.argv[2] || 8800
 const stringify = JSON.stringify.bind(JSON)
 const app = new Koa()

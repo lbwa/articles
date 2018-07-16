@@ -10,7 +10,8 @@
   "scripts": {
     "ts": "npx tsc",
     "server": "node dist/server",
-    "dev": "yarn run ts && yarn run server",
+    "dev": "yarn run ts && pm2 start pm2.config.js",
+    "restart": "yarn run ts && pm2 restart pm2.config.js",
     "compiler": "yarn run ts && node dist/server skip",
     "start": "yarn run server",
     "commit": "sh scripts/commit.sh",
