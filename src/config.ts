@@ -8,17 +8,20 @@
  */
 const { resolve } = require('./utils/index')
 
+// process.env.HOST is provided by pm2, same as PORT
+const host = process.env.HOST || '127.0.0.1'
+const port = process.env.PORT || '8800'
 const whiteList = [
   'https://lbwa.github.io',
   'https://set.sh'
 ]
-
+// generator base path
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
 
 module.exports = {
-  host: process.env.HOST || '127.0.0.1',
-  port: process.env.PORT || 8800,
+  host,
+  port,
   whiteList,
   cwd,
   catalogOutput
