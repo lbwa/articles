@@ -1,12 +1,8 @@
-const resolve = require('path').resolve
-
 import Koa = require('koa')
-import Router = require('koa-router')
-import send = require('koa-send')
 import compress = require('koa-compress')
-const { genMenu, contentList } = require('./generator')
-const cwd: string = resolve(__dirname, '../')
-const catalogOutput: string = resolve(__dirname, '../menu.json')
+
+const { genMenu } = require('./generator')
+const router = require('./routers/index')
 const config = require('./config')
 
 console.log('\nEnvironment: ', process.env.NODE_ENV)
@@ -14,11 +10,11 @@ console.log('\nEnvironment: ', process.env.NODE_ENV)
 const HOST = config.host
 const PORT = config.port
 const WHITELIST = config.whiteList
+const cwd: string = config.cwd
+const catalogOutput: string = config.catalogOutput
 const isDev = process.env.NODE_ENV === 'development'
-const stringify = JSON.stringify.bind(JSON)
 
 const app = new Koa()
-const router = new Router()
 
 app.use(async (ctx: Koa.Context, next: Function) => {
   console.log(`Request url is ${ctx.path}`)
@@ -48,38 +44,6 @@ app.use(async (ctx: Koa.Context, next: Function) => {
   })
   await next()
 })
-
-router
-  .get('/menu', async(ctx: Koa.Context, next: Function) => {
-    await send(ctx, './menu.json', {
-      root: resolve(__dirname, '../')
-    })
-  })
-  .get('/projects', async(ctx: Koa.Context, next: Function) => {
-    await send(ctx, './projects.json', {
-      root: resolve(__dirname, '../projects')
-    })
-  })
-  .get('/', async(ctx: Koa.Context, next: Function) => {
-    ctx.body = stringify({
-      date: new Date()
-    })
-  })
-  .get('*', async(ctx: Koa.Context, next: Function) => {
-     // delete '/' from '/something/' or '/something'
-    const url = ctx.path.replace(/\//g, '')
-
-    if (!contentList[url]) {
-      ctx.status = 404
-      ctx.body = stringify({
-        errno: 1,
-        message: '[Error]: invalid request'
-      })
-      return
-    }
-
-    ctx.body = contentList[url]
-  })
 
 // Make sure correct sequence
 app

@@ -6,9 +6,9 @@ const fs = require('fs')
 const path = require('path')
 const readMeta = require('front-matter')
 const glob = require('glob')
-const formatDate = require('./format-date')
+const formatDate = require('./utils/format-date')
 
-import { header, post, initialContent, contentList } from './types'
+import { header, post, initialContent, contentList } from './utils/types'
 
 function readFile (target: string) {
   // target 形如 '2018/180707-pwa-fundamentals/180707-pwa-fundamentals.md'
