@@ -7,17 +7,16 @@ import compress = require('koa-compress')
 const { genMenu, contentList } = require('./generator')
 const cwd: string = resolve(__dirname, '../')
 const catalogOutput: string = resolve(__dirname, '../menu.json')
+const config = require('./config')
 
 console.log('\nEnvironment: ', process.env.NODE_ENV)
 
-const whiteList = [
-  'https://lbwa.github.io',
-  'https://set.sh'
-]
+const HOST = config.host
+const PORT = config.port
+const WHITELIST = config.whiteList
 const isDev = process.env.NODE_ENV === 'development'
-const HOST = process.env.HOST || '127.0.0.1'
-const PORT = process.env.PORT || process.argv[2] || 8800
 const stringify = JSON.stringify.bind(JSON)
+
 const app = new Koa()
 const router = new Router()
 
@@ -38,8 +37,8 @@ app.use(async (ctx: Koa.Context, next: Function) => {
     origin = '*'
   } else {
     // white list, `Access-Control-Allow-Origin` only receive 1 value
-    const index = whiteList.indexOf(ctx.origin)
-    origin = index > -1 ? whiteList[index] : 'https://set.sh'
+    const index = WHITELIST.indexOf(ctx.origin)
+    origin = index > -1 ? WHITELIST[index] : 'https://set.sh'
   }
 
   ctx.set({
