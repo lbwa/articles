@@ -4,6 +4,7 @@ const menu = require('../controllers/menu')
 const projects = require('../controllers/projects')
 const home = require('../controllers/home')
 const docs = require('../controllers/docs')
+const error = require('../controllers/error')
 
 const router = new Router()
 
@@ -13,6 +14,7 @@ router
   .get('/menu', menu)
   .get('/projects', projects)
   .get('/', home)
-  .get('*', docs)
+  .get('/writings/:id', docs)
+  .all('*', error)
 
 module.exports = router

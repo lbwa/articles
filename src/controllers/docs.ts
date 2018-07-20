@@ -4,8 +4,8 @@ const { contentList } = require('../generator')
 const { stringify } = require('../utils/index')
 
 module.exports = async (ctx: Koa.Context, next: Function) => {
-  // delete '/' from '/something/' or '/something'
-  const url = ctx.path.replace(/\//g, '')
+  // delete '/' from '/writings/something/' or '/writings/something'
+  const url = ctx.path.replace(/^\/writings\//, '').replace(/\/$/g, '')
 
   if (!contentList[url]) {
     ctx.status = 404
