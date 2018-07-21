@@ -14,7 +14,17 @@ const app = new Koa()
 app.use(async (ctx: Koa.Context, next: Function) => {
   console.log(`Request url is ${ctx.path}`)
   try {
+    const START = process.hrtime()
     await next()
+    const PERIOD = process.hrtime(START) // [seconds, nanoseconds]
+    const output = PERIOD[0] * 1e3 + PERIOD[1] * 1e-6
+    const format = output.toLocaleString('zh', {
+      maximumFractionDigits: 4,
+      useGrouping: false
+    })
+    ctx.set({
+      'X-Response-Time': `${format}ms`
+    })
   } catch (err) {
     console.error(err)
     ctx.body = err.message
