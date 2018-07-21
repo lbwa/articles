@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'blog-api',
-      script: './dist/server.js',
+      script: './dist/index.js',
       env: {
         NODE_ENV: 'development',
         HOST: '127.0.0.1',

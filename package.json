@@ -9,11 +9,11 @@
   "private": true,
   "scripts": {
     "ts": "npx tsc",
-    "server": "node dist/server",
+    "server": "node dist/index",
     "dev": "yarn run ts && pm2 start pm2.config.js",
     "restart": "yarn run ts && pm2 restart pm2.config.js --update-env",
     "delete": "pm2 delete blog-api",
-    "compiler": "yarn run ts && node dist/server skip",
+    "compiler": "yarn run ts && node dist/index skip",
     "start": "yarn run server",
     "commit": "sh scripts/commit.sh",
     "now": "sh scripts/prod.sh",

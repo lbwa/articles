@@ -1,17 +1,12 @@
 import Koa = require('koa')
 import compress = require('koa-compress')
 
-const { genMenu } = require('./generator')
 const router = require('./routers/index')
-const config = require('./config')
+const { whiteList } = require('./config')
 
 console.log('\nEnvironment: ', process.env.NODE_ENV)
 
-const HOST = config.host
-const PORT = config.port
-const WHITELIST = config.whiteList
-const cwd: string = config.cwd
-const catalogOutput: string = config.catalogOutput
+const WHITELIST = whiteList
 const isDev = process.env.NODE_ENV === 'development'
 
 const app = new Koa()
@@ -53,15 +48,4 @@ app
   .use(router.routes())
   .use(router.allowedMethods())
 
-genMenu(cwd, catalogOutput).then(() => {
-  // 在执行脚本时传入指定参数将跳过建立 local server
-  // 主要用于部署前生成 menu.json
-  // ! notice: `now scale app-name.now.sh sfo1 1`, prevent app sleep
-  // ! It's `sfo1`, not `sfo`. Usage is wrong. https://zeit.co/blog/scale
-  // ! https://github.com/zeit/now-cli/issues/146#issuecomment-373925793
-  if (process.argv[2] === 'skip') return
-
-  app.listen(PORT, () => {
-    console.log(`\n Server is listening on http://${HOST}:${PORT}\n`)
-  })
-})
+module.exports = app
