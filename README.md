@@ -1,4 +1,4 @@
-# https://set.sh [![Build Status](https://travis-ci.org/lbwa/lbwa.github.io.svg?branch=vue)](https://travis-ci.org/lbwa/lbwa.github.io)
+# https://set.sh [![Build Status](https://travis-ci.org/lbwa/articles.svg?branch=master)](https://travis-ci.org/lbwa/articles)
 
 👉Browse [online](https://set.sh)
 
