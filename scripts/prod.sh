@@ -2,6 +2,8 @@
 
 set -e
 
-yarn run compiler
+yarn run ts
+node dist/index skip
+npx mocha test/http.spec.js
 now
 now alias

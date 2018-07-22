@@ -2,6 +2,6 @@
 
 set -e
 
-yarn run ts
+yarn run test
 git add .
 git-cz
