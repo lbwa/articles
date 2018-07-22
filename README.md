@@ -1,4 +1,4 @@
-# https://set.sh [![Build Status](https://travis-ci.org/lbwa/articles.svg?branch=master)](https://travis-ci.org/lbwa/articles) [![codecov](https://codecov.io/gh/lbwa/articles/branch/master/graph/badge.svg)](https://codecov.io/gh/lbwa/articles)
+# https://set.sh [![Build Status](https://travis-ci.org/lbwa/articles.svg?branch=master)](https://travis-ci.org/lbwa/articles) [![Coverage Status](https://coveralls.io/repos/github/lbwa/articles/badge.svg?branch=master)](https://coveralls.io/github/lbwa/articles?branch=master)
 
 👉Browse [online](https://set.sh)
 

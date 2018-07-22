@@ -11,6 +11,6 @@ install:
   - yarn add coveralls mocha-lcov-reporter -D
 
 script:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
+  - npx istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - rm -rf ./coverage
