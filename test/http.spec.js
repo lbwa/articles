@@ -7,7 +7,7 @@ const http = require('http')
 
 const parse = JSON.parse.bind(JSON)
 
-describe('Static server', () => {
+describe('Test route', () => {
   let app
   before((done) => {
     const cwd = resolve(__dirname, '../')
