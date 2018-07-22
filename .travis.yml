@@ -9,4 +9,4 @@ cache:
 install: yarn
 
 script:
-  - yarn run test
+  - yarn run test:cover

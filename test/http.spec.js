@@ -1,4 +1,6 @@
+const resolve = require('path').resolve
 const { expect } = require('chai')
+const { genMenu } = require('../dist/generator')
 const server = require('../dist/server')
 const http = require('http')
 
@@ -7,12 +9,18 @@ const parse = JSON.parse.bind(JSON)
 describe('Static server', () => {
   let app
   before((done) => {
-    app = server.listen(8899)
-    done()
+    const cwd = resolve(__dirname, '../')
+    const catalogOutput = resolve(__dirname, '../menu.json')
+    genMenu(cwd, catalogOutput)
+      .then(() => {
+        app = server.listen(8899)
+        done()
+      })
   })
 
   after((done) => {
     // https://github.com/visionmedia/supertest/issues/437
+    // https://stackoverflow.com/a/14636625
     app.close(() => {
       done()
     })
@@ -41,9 +49,49 @@ describe('Static server', () => {
       done()
     })
   })
+
+  it('Request one of docs', done => [
+    createRequest('/writings/pwa-fundamentals', (data) => {
+      const responseData = parse(data)
+      expect(responseData.errno).to.has.equal(0)
+      expect(responseData).to.has.property('to')
+      expect(responseData).to.has.property('title')
+      expect(responseData).to.has.property('author')
+      expect(responseData).to.has.property('date')
+      expect(responseData).to.has.property('tags')
+      expect(responseData).to.has.property('data')
+      done()
+    })
+  ])
+
+  it('Handle wrong method', done => {
+    createRequest(
+      '/',
+      data => {
+        const responseData = parse(data)
+        expect(responseData.errno).to.be.equal(1)
+        done()
+      },
+      'POST',
+      404
+    )
+  })
+
+  it('Handle wrong url', done => {
+    createRequest(
+      '/1',
+      data => {
+        const responseData = parse(data)
+        expect(responseData.errno).to.be.equal(1)
+        done()
+      },
+      'GET',
+      404
+    )
+  })
 })
 
-function createRequest (url, fn, method='GET') {
+function createRequest (url, fn, method='GET', statusCode=200) {
   const options = {
     hostname: 'localhost',
     port: 8899,
@@ -57,7 +105,7 @@ function createRequest (url, fn, method='GET') {
     .request(options, (res) => {
       res.setEncoding('utf8')
       res.on('data',fn)
-      expect(res.statusCode).to.be.equal(200)
+      expect(res.statusCode).to.be.equal(statusCode)
     })
     .on('error', (err) => {
       console.error(err)
