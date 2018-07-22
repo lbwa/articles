@@ -1,6 +1,7 @@
 const resolve = require('path').resolve
 const { expect } = require('chai')
 const { genMenu } = require('../dist/generator')
+const menu = require('../menu.json')
 const server = require('../dist/server')
 const http = require('http')
 
@@ -50,8 +51,11 @@ describe('Static server', () => {
     })
   })
 
-  it('Request one of docs', done => [
-    createRequest('/writings/pwa-fundamentals', (data) => {
+  it('Request one of docs', done => {
+    const len = menu.length
+    const random = Math.round(Math.random() * len)
+    const doc = menu[random]
+    createRequest(`/writings/${doc.to}`, (data) => {
       const responseData = parse(data)
       expect(responseData.errno).to.has.equal(0)
       expect(responseData).to.has.property('to')
@@ -62,7 +66,7 @@ describe('Static server', () => {
       expect(responseData).to.has.property('data')
       done()
     })
-  ])
+  })
 
   it('Handle wrong method', done => {
     createRequest(
@@ -80,6 +84,19 @@ describe('Static server', () => {
   it('Handle wrong url', done => {
     createRequest(
       '/1',
+      data => {
+        const responseData = parse(data)
+        expect(responseData.errno).to.be.equal(1)
+        done()
+      },
+      'GET',
+      404
+    )
+  })
+
+  it('Handle wrong docs request', done => {
+    createRequest(
+      '/writings/1',
       data => {
         const responseData = parse(data)
         expect(responseData.errno).to.be.equal(1)
