@@ -12,6 +12,7 @@ describe('Static server', () => {
   })
 
   after((done) => {
+    // https://github.com/visionmedia/supertest/issues/437
     app.close(() => {
       done()
     })
@@ -52,15 +53,14 @@ function createRequest (url, fn, method='GET') {
 
   // http.get is one of alias
   // https://nodejs.org/api/http.html#http_http_request_options_callback
-  const req = http.request(options, (res) => {
-    res.setEncoding('utf8')
-    res.on('data',fn)
-    expect(res.statusCode).to.be.equal(200)
-  })
-
-  req.on('error', (err) => {
-    console.error(err)
-  })
-
-  req.end()
+  http
+    .request(options, (res) => {
+      res.setEncoding('utf8')
+      res.on('data',fn)
+      expect(res.statusCode).to.be.equal(200)
+    })
+    .on('error', (err) => {
+      console.error(err)
+    })
+    .end()
 }

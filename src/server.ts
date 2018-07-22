@@ -4,12 +4,12 @@ import compress = require('koa-compress')
 const router = require('./routers/index')
 const { whiteList } = require('./config')
 
-console.log('\nEnvironment: ', process.env.NODE_ENV)
-
 const WHITELIST = whiteList
 const isDev = process.env.NODE_ENV === 'development'
 // for unit test
 const isManual = process.env.NODE_ENV === undefined
+
+console.log('\nEnvironment: ', isManual ? 'manual' : process.env.NODE_ENV )
 
 const app = new Koa()
 
