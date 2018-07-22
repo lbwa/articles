@@ -13,6 +13,9 @@ module.exports = async (ctx: Koa.Context, next: Function) => {
       errno: 1,
       message: '[Error]: invalid request'
     })
+    ctx.set({
+      'Content-Type': 'application/json; charset=utf-8'
+    })
     return
   }
 
