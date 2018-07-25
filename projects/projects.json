@@ -20,8 +20,8 @@
      "desc":"一个 Vue.js 的 SSR 实现示例"
   },
   {
-    "name":"vue-sonar",
-    "url":"https://github.com/lbwa/vue-sonar",
-    "desc":"一个基于 Vue.js 2.5 / Vue router / Vuex 的 Web Music APP"
+    "name":"docs-server",
+    "url":"https://github.com/lbwa/docs-server",
+    "desc":"一个基于 Koa2 的文档微服务 server"
   }
 ]
