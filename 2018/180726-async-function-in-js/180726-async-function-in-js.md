@@ -7,9 +7,9 @@ tags:
     - async
 ---
 
-> 本文旨在讨论 `async function` 的实现原理。但实现 `async function` 的方式不具有唯一性，其实现方式多种多样，但这些实现方式都应遵循 `ES` 标准中的原理来实现 `async function`。
+> 本文旨在讨论 `async function` 的实现原理。但实现 `async function` 的方式不具有唯一性，其实现方式多种多样，但这些实现方式都应遵循 `ES` 标准中的原理来实现 `async function`。本文主要介绍了以 `Generator` 函数为基础，以 `Promise` 对象实现自动执行器来实现 `async function`。
 
-起因是由于自己在使用 `async function` 时疑惑 `async function` 的本质到底是什么，它的函数体在执行时，是在宏任务队列 `task queue` 中执行还是在微任务队列 `micro queue` 中执行还是以普通代码执行的形式在当前宏任务的执行上下文栈中执行？
+起因是由于自己在使用 `async function` 时疑惑 `async function` 的本质到底是什么，它的函数体在执行时，是在宏任务队列 `task queue` 中执行（宏任务异步回调）还是在微任务队列 `micro queue` 中执行（微任务异步回调）还是以普通代码执行的形式在当前宏任务的执行上下文栈中执行？
 
 ## Typescript 中的实现
 
@@ -55,9 +55,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 ```
 
-以上是自己使用 `typescript` 编译 `async function` 返回的编译结果，从结果可以看出，`async function` 本质是 `Generator` 函数加上自动执行器。另外参考 [co 源码] 和 [ECMAScript 6 入门] 中实现 `async function` 的原理亦与之相似。
+以上是自己使用 `typescript` 编译 `async function` 返回的编译结果，从结果可以看出，`typescript 2.9.2` 中 `async function` 实现原理的本质是 `Generator` 函数加上 `Promise` 自动执行器。另外参考 [co 源码] 和 [ECMAScript 6 入门] 中实现 `async function` 的原理亦与之相似。
 
-其中的关键点在于使用 `Promise.resolve` 来调用 `then` 方法，以通过微任务队列来实现自动调用 `Generator` 函数的 `next` 方法。那么在 `async function` 函数体中，在遇到第一个 `await` 关键字之前的所有代码执行都是在 ***当前宏任务的执行上下文栈*** 中被调用执行，在第一个 `await` 及其之后的所有同步或异步代码都是通过 ***微任务队列*** `microtask queue` 来实现相对于 `async function` 函数体外部的 ***非阻塞*** 执行。
+其中的关键点在于使用 `Promise.resolve` 来调用 `then` 方法，以通过 ***微任务队列*** 来实现自动调用 `Generator` 函数的 `next` 方法。那么在 `async function` 函数体中，在遇到第一个 `await` 关键字之前的所有代码执行都是在 ***当前宏任务的执行上下文栈*** 中被调用执行，在第一个 `await` 及其之后的所有同步或异步代码都是通过 ***微任务队列*** `microtask queue` 来实现相对于 `async function` 函数体外部的 ***非阻塞*** 执行。
 
 ## ES 标准
 
@@ -132,8 +132,12 @@ const ts = async () => {
   // 2 current event loop
   console.log('From async function')
 
+  /**
+   * 1. 第一次执行至此时， asyncContext 弹出执行上下文栈，并移除当前执行上下文标识
+   * 2. await 标识了一个异步操作，那么为了不阻塞当前宏任务中其他执行上下文栈的执行，故
+   * 此时 asyncContext 弹出执行上下文栈，将当前执行上下文标识转移给其他执行上下文
+   */
   // 4 microtask queue
-  // async function 执行上下文弹出执行上下文栈，并移除当前执行上下文标识
   const a = await promise
 
   // 4 microtask queue
@@ -147,7 +151,7 @@ ts()
 // 在 async function 遇到第一个 await 之后获得当前执行上下文标识
 console.log('event loop end')
 
-// 匿名函数在倒计时结束后加入 task queue，此处即是成为下一个宏任务
+// 匿名函数在倒计时结束后加入 task queue，此处即是成为宏任务队列中的下一个宏任务
 setTimeout(()=>{
   // 5 next event loop
   console.log('From setTimeout')
@@ -165,13 +169,31 @@ From setTimeout
 
 以上结果正好验证了之前对 `async function` 的执行原理分析。
 
-在 2 处时，代码执行仍在当前事件循环的执行上下文栈中执行，当遇到第一个 `await` 表达式时，该表达式进入了 `heap memory` 等待 `Promise` 被 `resolved`（示例代码我是直接调用 `resolve()` 那么即是省略了进入 `heap memory` 步骤，但不影响分析 `async function`），在 `await` 表达式等待期间，继续执行当前宏任务的其他执行上下文。待 `await` 表达式被 `resolved` 之后，该表达式将进入 `microtask queue` 等待执行。
+在 2 处时，代码执行仍在当前事件循环的执行上下文栈中执行，当遇到第一个 `await` 表达式时，该表达式进入了 `heap memory` 等待 `Promise` 被 `resolved`（示例代码中是直接调用 `resolve()`，这不影响分析 `async function`）。在 `await` 表达式等待计算结果期间，当前执行上下文标识转移，继续执行当前宏任务的其他执行上下文。待 `await` 表达式被 `resolved` 之后，该表达式将进入 `microtask queue` 等待执行（如同正常的微任务异步回调一样）。
 
 `await` 表达式及其之后所有代码之所以要进入 `microtask queue` 正是为了 ***防止*** 对当前宏任务中其他执行上下文造成 ***阻塞***。在他进入 `microtask queue` 之后，只有等到当前宏任务所有执行上下文都执行完毕之后，才会被调用执行。
 
 以上正是体现了 `async function` 的异步原理。
 
+## 结论
+
+通过简要分析一般 `async function` 的原理及其典型实现方式，可以得出结论：
+
+1. 异步流程必须保证不阻塞后续代码执行。实现 `async function` 的关键点即在于非阻塞。
+
+    - 在现行 `ES` 标准中，无疑 `microtask queue` 是符合这一角色担当（不是实现非阻塞的唯一方式）。`microtask queue` 不阻塞当前宏任务其他执行上下文的执行，只在当前宏任务中所有执行上下文都执行完成后被调用。这样的特点正好符合 ***非阻塞***　的特性。
+
+2. 为了实现异步流程可控性，控制异步流程的并发性，即表现为以同步的方式书写异步函数。那么可以结合 `Generator` 函数来实现。`Generator function` 本身具有 ***可控***　这一特点（即 `next` 方法），可严格控制异步流程。结合 `Generator function` 的可控特点可实现 `async function` 中控制多个异步流程之间的逻辑关系，各个异步流程之间执行先后顺序，它们之间是否需要并发异步执行。
+
+3. `Promise` 对象的异步回调的调用方式即是微任务异步回调。那么可以通过 `Promise` 对象来实现 2 中的 `Generator function` 的自动执行器。那么可实现在 2 的基础上达到非阻塞的效果。
+
+4. 结合 2 和 3 ，那么即可实现 1 中的 ***非阻塞*** 队列。该队列不阻塞当前宏任务中其他执行上下文的执行。并且可以做到严格控制各个异步流程之间的关系（***执行先后，是否并发***）。
+
 ## 参考
+
+- [ECMAScript asyncFunctionStart][async function start]
+
+- [ECMAScript await][await]
 
 - [co 源码]
 
