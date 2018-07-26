@@ -13,7 +13,7 @@ tags:
 
 ## Typescript 中的实现
 
-`Typescript` 通过 `Generator` 函数组合 `Promise` 对象来实现 `async function`。
+`Typescript` 通过 `Promise` 对象来实现 `Generator function` 中自动调用 `next` 方法。即实现了 `async function`。
 
 ```js
 // 编译为 ES2016，即没有 async function 的情形
@@ -55,7 +55,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 ```
 
-以上是自己使用 `typescript` 编译 `async function` 返回的编译结果，从结果可以看出，`async function` 本质是 `Generator` 函数加上自动执行器。另外参考 [co 源码] 和 [ECMAScript 6 入门] 中亦有对该函数相似原理实现 `async function` 的解析。
+以上是自己使用 `typescript` 编译 `async function` 返回的编译结果，从结果可以看出，`async function` 本质是 `Generator` 函数加上自动执行器。另外参考 [co 源码] 和 [ECMAScript 6 入门] 中实现 `async function` 的原理亦与之相似。
 
 其中的关键点在于使用 `Promise.resolve` 来调用 `then` 方法，以通过微任务队列来实现自动调用 `Generator` 函数的 `next` 方法。那么在 `async function` 函数体中，在遇到第一个 `await` 关键字之前的所有代码执行都是在 ***当前宏任务的执行上下文栈*** 中被调用执行，在第一个 `await` 及其之后的所有同步或异步代码都是通过 ***微任务队列*** `microtask queue` 来实现相对于 `async function` 函数体外部的 ***非阻塞*** 执行。
 
