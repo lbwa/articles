@@ -33,6 +33,19 @@ describe('Test route', () => {
     })
   })
 
+  it('Request recent-posts', (done) => {
+    createRequest('/recent-posts', (data) => {
+      const responseData = parse(data)
+      expect(responseData[0].errno).to.has.equal(0)
+      expect(responseData[0]).to.has.property('to')
+      expect(responseData[0]).to.has.property('title')
+      expect(responseData[0]).to.has.property('author')
+      expect(responseData[0]).to.has.property('date')
+      expect(responseData[0]).to.has.property('tags')
+      done()
+    })
+  })
+
   it('Request menu', (done) => {
     createRequest('/menu', (data) => {
       const responseData = parse(data)
