@@ -1,8 +1,8 @@
 [
   {
-    "name":"reactive-render",
-    "url":"https://github.com/lbwa/reactive-render",
-    "desc":"Vue.js 响应式原理及其依赖收集分析"
+    "name":"docs-server",
+    "url":"https://github.com/lbwa/docs-server",
+    "desc":"一个基于 Koa2 的文档微服务 server"
   },
   {
     "name": "better-jsonp",
@@ -15,13 +15,18 @@
     "desc": "一个简易前端脚手架实现"
   },
   {
+    "name":"grid-style",
+    "url":"https://github.com/lbwa/grid-style",
+    "desc":"一个基于 flexbox 的 CSS grid 布局实现"
+  },
+  {
+    "name":"reactive-render",
+    "url":"https://github.com/lbwa/reactive-render",
+    "desc":"Vue.js 响应式原理及其依赖收集分析"
+  },
+  {
      "name":"vue-ssr",
      "url":"https://github.com/lbwa/vue-ssr",
      "desc":"一个 Vue.js 的 SSR 实现示例"
-  },
-  {
-    "name":"docs-server",
-    "url":"https://github.com/lbwa/docs-server",
-    "desc":"一个基于 Koa2 的文档微服务 server"
-  }
+  }  
 ]
