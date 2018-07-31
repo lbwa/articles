@@ -17,7 +17,7 @@
   {
     "name":"grid-style",
     "url":"https://github.com/lbwa/grid-style",
-    "desc":"一个基于 flexbox 的 CSS grid 布局实现"
+    "desc":"一个基于 flexbox 的 CSS grid 布局工具箱"
   },
   {
     "name":"reactive-render",
@@ -28,5 +28,5 @@
      "name":"vue-ssr",
      "url":"https://github.com/lbwa/vue-ssr",
      "desc":"一个 Vue.js 的 SSR 实现示例"
-  }  
+  }
 ]
