@@ -7,6 +7,12 @@ tags:
     - JavaScript
 ---
 
+> The abstract operation ResolveThisBinding determines the binding of the keyword this using the LexicalEnvironment of the running execution context.
+
+JS 中的 `ResolveThisBinding` 操作将会绑定 [this][keyword] 关键字为当前执行上下文的词法作用环境。
+
+[keyword]:https://www.ecma-international.org/ecma-262/#sec-resolvethisbinding
+
 # 一、ES5中this的值
 
 ## 1.1 定义：this，指函数的调用上下文。
@@ -98,11 +104,11 @@ obj.method(fn, 1);
 
 1. （个人理解）在函数a内执行函数b时，确切来说**真正调用执行b的还是window对象**，此时函数b内的this是指向window对象，函数a的作用是**告知引擎添加一个执行b的任务**。
 
-2. 当函数c是arguments对像的第 i 项时，`arguments[i]()`中的this指向的是arguments对象。  
+2. 当函数c是arguments对像的第 i 项时，`arguments[i]()`中的this指向的是arguments对象。
 
 **补充：**
 
-　　在`《JavaScript语言精粹》修订版`P28中，对于没有显式的调用对象的函数调用，该被调用的函数内的this指向全局对象。作者认为这是JavaScript设计上的一个“错误”。  
+　　在`《JavaScript语言精粹》修订版`P28中，对于没有显式的调用对象的函数调用，该被调用的函数内的this指向全局对象。作者认为这是JavaScript设计上的一个“错误”。
 
 　　作者认为此时的函数调用中的this应该指向外部函数的this变量。其中当函数A内调用函数B时，首先执行函数A的语句，当执行到调用函数B语句时，暂停函数A内的语句执行，将控制权转交给函数B，先执行完函数B，然后再继续执行函数A（`《JavaScript语言精粹》修订版`P27）。
 
@@ -164,7 +170,7 @@ Function.method('new', function() {
   var that = Object.create(this.prototype);
 
   // 调用构造器函数，绑定 -this- 到新对象（指that）上
-  // 此处存在apply方法，this 指向（与new连用的）构造函数，则以下语句表示，that调用以 
+  // 此处存在apply方法，this 指向（与new连用的）构造函数，则以下语句表示，that调用以
   // arguments对象为参数对象的构造函数（指定构造函数中的this值为that），目的是给that
   // 添加属性（或方法）
   // 此处根据构造函数的函数体，函数体内可能有（或没有）return语句，则other可能是对象、
@@ -280,7 +286,7 @@ let foo = () => {
           // 表是什么。若找到，搜索停止。若没有，则该变量未声明
           // fn中对变量a的赋值本质是，向上在作用域链中搜索，找到位于foo中的变量a，并在
           // fn中对foo的变量a进行赋值
-          a = 222;  
+          a = 222;
         },
         num: () => {
           console.log(this); // foo对象
