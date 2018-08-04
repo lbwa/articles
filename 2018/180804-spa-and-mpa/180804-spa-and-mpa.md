@@ -66,7 +66,8 @@ Vue.use(VueRouter)
 // 静态加载，不论用户是否访问该页面都在初始化应用时加载
 import home from '~/components/home')
 
-// 动态加载，仅在 webpack 请求该模块的 chunk 时才会加载，即只有在用户访问时加载该组件
+// 动态加载方式一，仅在 webpack 请求该模块的 chunk 时才会加载，即只有在用户访问时加载
+// 该组件
 const app = () => import(/* webpackChunkName: "app" */ '~/components/app')
 
 export default new VueRouter({
@@ -81,9 +82,12 @@ export default new VueRouter({
         },
         {
           path: '/info',
-          // chunk 命名必须配合 webpack 中 output.chunkFileName: '[name].js' 指定
-          // 占位符为 `[name]` 使用
-          component: () => import(/* webpackChunkName: "info" */ '~/components/info') // 动态加载
+          /**
+           * 动态加载方式二
+           * 1. chunk 命名必须配合 webpack 中 output.chunkFileName: '[name].js' 指
+           * 定占位符为 `[name]` 使用
+           */
+          component: () => import(/* webpackChunkName: "info" */ '~/components/info')
         }
       ]
     }
