@@ -21,6 +21,7 @@
     "test:cover": "yarn run ts && npx istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "dependencies": {
+    "docs-server": "^1.1.0",
     "front-matter": "^2.3.0",
     "glob": "^7.1.2",
     "koa": "^2.5.2",

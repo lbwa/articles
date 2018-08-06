@@ -1,25 +1,52 @@
-const { genMenu } = require('./generator')
-const server = require('./server')
-const config = require('./config')
+import Koa = require('koa')
+import send = require('koa-send')
 
-const HOST: string = config.host
-const PORT: string = config.port
-const cwd: string = config.cwd
-const catalogOutput: string = config.catalogOutput
+const DocsServer = require('docs-server')
+const path = require('path')
+const fs = require('fs')
 
-genMenu(cwd, catalogOutput)
-  .then(() => {
-    // 在执行脚本时传入指定参数将跳过建立 local server
-    // 主要用于部署前生成 menu.json
-    // ! notice: `now scale app-name.now.sh sfo1 1`, prevent app sleep
-    // ! It's `sfo1`, not `sfo`. Usage is wrong. https://zeit.co/blog/scale
-    // ! https://github.com/zeit/now-cli/issues/146#issuecomment-373925793
-    if (process.argv[2] === 'skip') return
+module.exports = new DocsServer({
+  filter: (origin: string) => {
+    const removeShortDate = origin.replace(/\/{0}(\d{6}-)+/g, '')
+    const removeInitialYear = removeShortDate.replace(/^\d{4}/, '')
+    const removeRepeat = removeInitialYear.replace(/^\/\S+\//, '')
+    const removeExtension = removeRepeat.replace(/\.md$/, '')
+    return `writings/${removeExtension}`
+  },
+  extra: [
+    {
+      route: '/projects',
+      middleware: async (ctx: Koa.Context, next: Function) => {
+        await send(ctx, './projects/projects.json', {
+          maxage: 3600,
+          root: path.resolve(__dirname, '../')
+        })
+      }
+    },
+    {
+      route: '/recent-posts',
+      middleware: async (ctx: Koa.Context, next: Function) => {
+        const originalPromise:Promise<string> = new Promise((resolve, reject) => {
+          fs.readFile(
+            path.resolve(__dirname, '../menu.json'),
+            'utf8',
+            (err: Error, data: string) => {
+              err ? reject(err) : resolve(data)
+            }
+          )
+        })
 
-    server.listen(PORT, () => {
-      console.log(`\n Server is listening on http://${HOST}:${PORT}\n`)
-    })
-  })
-  .catch((err: Error) => {
-    console.error(err)
-  })
+        const origin = JSON.parse(await originalPromise)
+        let recentPosts: {}[] = []
+        for (let i = 0; i < 5; i++) {
+          recentPosts.push((<any>origin)[i])
+        }
+        ctx.status = 200
+        ctx.body = JSON.stringify(recentPosts)
+        ctx.set({
+          'Content-Type': 'application/json; charset=utf-8'
+        })
+      }
+    }
+  ]
+})

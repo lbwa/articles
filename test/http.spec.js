@@ -1,30 +1,20 @@
-const resolve = require('path').resolve
+const app = require('../dist/index')
 const { expect } = require('chai')
-const { genMenu } = require('../dist/generator')
-const menu = require('../menu.json')
-const server = require('../dist/server')
 const http = require('http')
+const menu = require('../menu.json')
 
 const parse = JSON.parse.bind(JSON)
 
 describe('Test route', () => {
-  let app
   before((done) => {
-    const cwd = resolve(__dirname, '../')
-    const catalogOutput = resolve(__dirname, '../menu.json')
-    genMenu(cwd, catalogOutput)
-      .then(() => {
-        app = server.listen(8899)
-        done()
-      })
+    app.genPromise.then(() => done())
   })
 
   after((done) => {
     // https://github.com/visionmedia/supertest/issues/437
     // https://stackoverflow.com/a/14636625
-    app.close(() => {
-      done()
-    })
+    Promise.resolve(app.server.close())
+      .then(() => done())
   })
 
   it('Request home', (done) => {
@@ -68,7 +58,7 @@ describe('Test route', () => {
     const len = menu.length
     const random = Math.round(Math.random() * len)
     const doc = menu[random]
-    createRequest(`/writings/${doc.to}`, (data) => {
+    createRequest(`/${doc.to}`, (data) => {
       const responseData = parse(data)
       expect(responseData.errno).to.has.equal(0)
       expect(responseData).to.has.property('to')
@@ -90,7 +80,7 @@ describe('Test route', () => {
         done()
       },
       'POST',
-      404
+      405
     )
   })
 
@@ -124,7 +114,7 @@ describe('Test route', () => {
 function createRequest (url, fn, method='GET', statusCode=200) {
   const options = {
     hostname: 'localhost',
-    port: 8899,
+    port: 8800,
     path: url,
     method,
   }
