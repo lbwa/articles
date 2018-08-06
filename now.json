@@ -11,7 +11,8 @@
     "2018",
     "dist",
     "menu.json",
-    "projects"
+    "projects",
+    "yarn.lock"
   ],
   "env": {
     "NODE_ENV": "production"
@@ -19,7 +20,7 @@
   "scale": {
     "sfo1": {
       "min": 1,
-      "max": 2
+      "max": 1
     }
   }
 }
