@@ -6,6 +6,6 @@ One of microservices based on Koa2 for my blog.
 
 ## Related projects
 
-- [docs-server] - A static resource server built with myself
+- [docs-server] - My other project, a documentation server
 
 [docs-server]:https://github.com/lbwa/docs-server
