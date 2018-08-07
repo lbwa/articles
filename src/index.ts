@@ -3,7 +3,7 @@ import send = require('koa-send')
 
 const DocsServer = require('docs-server')
 const path = require('path')
-const fs = require('fs')
+const menu = require('../menu.json')
 
 module.exports = new DocsServer({
   filter: (origin: string) => {
@@ -26,20 +26,9 @@ module.exports = new DocsServer({
     {
       route: '/recent-posts',
       middleware: async (ctx: Koa.Context, next: Function) => {
-        const originalPromise:Promise<string> = new Promise((resolve, reject) => {
-          fs.readFile(
-            path.resolve(__dirname, '../menu.json'),
-            'utf8',
-            (err: Error, data: string) => {
-              err ? reject(err) : resolve(data)
-            }
-          )
-        })
-
-        const origin = JSON.parse(await originalPromise)
         let recentPosts: {}[] = []
         for (let i = 0; i < 5; i++) {
-          recentPosts.push((<any>origin)[i])
+          recentPosts.push(menu[i])
         }
         ctx.status = 200
         ctx.body = JSON.stringify(recentPosts)
@@ -48,5 +37,24 @@ module.exports = new DocsServer({
         })
       }
     }
-  ]
+  ],
+
+  headerMiddleware: async (ctx: Koa.Context, next: Function) => {
+    const whitelist = [
+      'https://set.sh',
+      'https://lbw.netlify.com',
+      'http://localhost:8800'
+    ]
+
+    const index = whitelist.indexOf(ctx.origin)
+
+    const origin = index > -1 ? whitelist[index] : 'https://set.sh'
+
+    ctx.set({
+      'Access-Control-Allow-Origin': `${origin}`,
+      'Access-Control-Allow-Methods': 'GET,POST'
+    })
+
+    await next()
+  }
 })
