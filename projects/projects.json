@@ -2,7 +2,7 @@
   {
     "name":"docs-server",
     "url":"https://github.com/lbwa/docs-server",
-    "desc":"一个基于 Koa2 的文档微服务 server"
+    "desc":"一个基于 Koa2 的文档 microservice 实现"
   },
   {
     "name": "better-jsonp",
@@ -10,14 +10,14 @@
     "desc": "一个轻量化的 JSONP 实现"
   },
   {
+    "name":"grid-style",
+    "url":"https://github.com/lbwa/grid-style",
+    "desc":"一个基于 flexbox 的 CSS grid 布局实现"
+  },
+  {
     "name": "builder-cli",
     "url": "https://github.com/lbwa/builder-cli",
     "desc": "一个简易前端脚手架实现"
-  },
-  {
-    "name":"grid-style",
-    "url":"https://github.com/lbwa/grid-style",
-    "desc":"一个基于 flexbox 的 CSS grid 布局工具箱"
   },
   {
     "name":"reactive-render",

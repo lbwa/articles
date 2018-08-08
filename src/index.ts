@@ -42,13 +42,14 @@ module.exports = new DocsServer({
   headerMiddleware: async (ctx: Koa.Context, next: Function) => {
     const whitelist = [
       'https://set.sh',
-      'https://lbw.netlify.com',
-      'http://localhost:8800'
+      'https://lbw.netlify.com'
     ]
 
     const index = whitelist.indexOf(ctx.origin)
 
-    const origin = index > -1 ? whitelist[index] : 'https://set.sh'
+    const defaultOrigin = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://set.sh'
+
+    const origin = index > -1 ? whitelist[index] : defaultOrigin
 
     ctx.set({
       'Access-Control-Allow-Origin': `${origin}`,
