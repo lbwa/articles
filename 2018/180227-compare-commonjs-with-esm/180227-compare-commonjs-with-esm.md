@@ -83,7 +83,7 @@ const vue = require('vue')
 ### 作用域
 
 他们每个模块都具有自己独立的作用域，模块中的代码是在模块内部的作用域执行的。模块中的顶层变量外部是不可见的。
-　　
+
 ## 不同点
 
 ### 对被加载模块的输出值的引用方式不同
@@ -112,6 +112,6 @@ CommonJS 模块的加载机制详见前文[模块缓存/加载机制][2]
 
 [1]:http://es6.ruanyifeng.com/#docs/module-loader#%E5%8A%A0%E8%BD%BD%E8%A7%84%E5%88%99
 
-[2]:https://lbwa.github.io//blog/writings/compare-commonjs-with-esm/#模块缓存-加载机制
+[2]:https://set.sh/blog/writings/compare-commonjs-with-esm/#模块缓存-加载机制
 
 [3]:http://es6.ruanyifeng.com/#docs/module-loader#%E5%8A%A0%E8%BD%BD%E8%A7%84%E5%88%99

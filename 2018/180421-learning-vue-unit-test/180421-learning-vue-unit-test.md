@@ -138,7 +138,7 @@ Vue Test Utils 是同步触发事件。因此 Vue.nextTick 不是必须的。
 
 [example-done-2]:https://github.com/lbwa/vue-unit-test/blob/3fcee440f0e0511071d8f559b54b88ab23197904/test/unit/specs/LayoutContent.spec.js#L104-L107
 
-[event-loop]:https://lbwa.github.io/blog/writings/event-loop/
+[event-loop]:https://set.sh/blog/writings/event-loop/
 
 # travis CI
 

@@ -459,4 +459,4 @@ auto 即为默认值时，有等式：A 的 width + margin / padding === A 的�
 
 [理解 BFC 和闭合浮动][css-bfc]
 
-[css-bfc]:https://lbwa.github.io/blog/writings/css-bfc/
+[css-bfc]:https://set.sh/blog/writings/css-bfc/

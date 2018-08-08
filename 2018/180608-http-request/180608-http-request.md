@@ -19,7 +19,7 @@ tags:
 
 （拓展阅读: `HTTP 响应首部` - [Set-Cookie][set-cookie]）
 
-[set-cookie]:https://lbwa.github.io/blog/writings/http-response/#set-cookie
+[set-cookie]:https://set.sh/blog/writings/http-response/#set-cookie
 
 ## Connection/长连接
 
@@ -93,7 +93,7 @@ tags:
 
 与响应首部中的 `Content-Type`（[source][response-content-type]）进行区分。请求首部的 `Content-Type` 表示传输给 `server` 端的数据内容的 `MIME` 类型，该请求首部可用于提交 `Form` 表单的 `POST` 请求中。
 
-[response-content-type]:https://lbwa.github.io/blog/writings/http-response/#content-type-内容协商
+[response-content-type]:https://set.sh/blog/writings/http-response/#content-type-内容协商
 
 ### 通过标签的默认行为提交
 

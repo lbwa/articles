@@ -584,7 +584,7 @@ ins1 === ins2 // true
     ```
     以上代码保证了即使存在多次点击，也只会在第一次点击时创建弹窗元素。另外该效果也可使用函数防抖（[extension][debounce-function]）来实现，不同的是，只有在有限时间内的最后一次点击生效。但是超过有限时间仍然会创建多个弹窗元素。
 
-[debounce-function]:https://github.com/lbwa/lbwa.github.io/issues/10
+[debounce-function]:https://github.com/lbwa/set/issues/10
 
 2. 在单例通过子类拓展后，使用者可以调用该拓展后的单例而不用修改使用者本身的代码。
 
