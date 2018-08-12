@@ -2,7 +2,7 @@
   {
     "name":"docs-server",
     "url":"https://github.com/lbwa/docs-server",
-    "desc":"一个基于 Koa2 的文档 microservice 实现"
+    "desc":"一个用于自动构建文档类型 server 的 Nodejs 实现"
   },
   {
     "name": "better-jsonp",
