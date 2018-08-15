@@ -18,7 +18,7 @@ module.exports = new DocsServer({
       route: '/projects',
       middleware: async (ctx: Koa.Context, next: Function) => {
         await send(ctx, './projects/projects.json', {
-          maxage: 3600,
+          maxage: 60 * 60 * 1000,
           root: path.resolve(__dirname, '../')
         })
       }
@@ -42,7 +42,8 @@ module.exports = new DocsServer({
   headerMiddleware: async (ctx: Koa.Context, next: Function) => {
     const whitelist = [
       'https://set.sh',
-      'https://lbw.netlify.com' // ctx.origin always equal to `http://docs.set.sh` on the `now` server
+      'https://lbw.netlify.com'
+      // ctx.origin always equal to `http://docs.set.sh` on the `now` server
     ]
 
     const index = whitelist.indexOf(ctx.origin)
