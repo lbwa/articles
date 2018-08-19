@@ -13,12 +13,13 @@ module.exports = new DocsServer({
     const removeExtension = removeRepeat.replace(/\.md$/, '')
     return `writings/${removeExtension}`
   },
+
   extra: [
     {
       route: '/projects',
       middleware: async (ctx: Koa.Context, next: Function) => {
         await send(ctx, './projects/projects.json', {
-          maxage: 60 * 60 * 1000,
+          maxage: 30 * 60 * 1000,
           root: path.resolve(__dirname, '../')
         })
       }
@@ -40,21 +41,25 @@ module.exports = new DocsServer({
   ],
 
   headerMiddleware: async (ctx: Koa.Context, next: Function) => {
+    const defaultOrigin = process.env.NODE_ENV === 'development'
+      ? '*'
+      : 'https://set.sh'
+
     const whitelist = [
       'https://set.sh',
-      'https://lbw.netlify.com'
-      // ctx.origin always equal to `http://docs.set.sh` on the `now` server
+      'https://lbw.netlify.com',
+      'https://blog.set.sh'
     ]
 
-    const index = whitelist.indexOf(ctx.origin)
-
-    const defaultOrigin = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://set.sh'
+    // 不要使用 ctx.origin 或 ctx.request.origin 别名
+    // 二者值在 服务器上与 ctx.request.headers.origin 不同
+    const index = whitelist.indexOf(ctx.request.headers.origin)
 
     const origin = index > -1 ? whitelist[index] : defaultOrigin
 
     ctx.set({
       'Access-Control-Allow-Origin': `${origin}`,
-      'Access-Control-Allow-Methods': 'GET,POST'
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
     })
 
     await next()
