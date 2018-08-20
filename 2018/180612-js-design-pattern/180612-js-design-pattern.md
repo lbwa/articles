@@ -765,7 +765,7 @@ sub.removeObserver(obs)
 
 ![observer-pattern][observer-pattern]
 
-[observer-pattern]:https://rawgit.com/lbwa/articles/master/2018/180612-js-design-pattern/observer-pattern.svg
+[observer-pattern]:https://assets.set.sh/2018/180612-js-design-pattern/observer-pattern.svg
 
 ## 发布/订阅模式
 
@@ -847,7 +847,7 @@ pub.publish('index') // I'm from index
 
 ![publish-subscribe][publish-subscribe]
 
-[publish-subscribe]:https://rawgit.com/lbwa/articles/master/2018/180612-js-design-pattern/publish-subscribe.svg
+[publish-subscribe]:https://assets.set.sh/2018/180612-js-design-pattern/publish-subscribe.svg
 
 ### 实际应用
 

@@ -13,7 +13,7 @@ tags:
 
   ![http-tcp][http-tcp]
 
-[http-tcp]:https://rawgit.com/lbwa/articles/master/2018/180606-http-protocol/http-tcp.svg
+[http-tcp]:https://assets.set.sh/2018/180606-http-protocol/http-tcp.svg
 
 - `HTTP 1.0` 时，在 `HTTP` 请求创建时，同样会创建一个 `TCP` 通道用于传输数据。在服务端响应请求后，`TCP` 通道就会关闭（非常驻）。
 
@@ -95,7 +95,7 @@ tags:
 
 ![http-bw][http-bw]
 
-[http-bw]:https://rawgit.com/lbwa/articles/master/2018/180606-http-protocol/http-bw.svg
+[http-bw]:https://assets.set.sh/2018/180606-http-protocol/http-bw.svg
 
 ## HTTP 方法
 
@@ -393,7 +393,7 @@ server {
 
 [content-negotiation]:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
 
-[https-principle]:https://rawgit.com/lbwa/articles/master/2018/180606-http-protocol/https-principle.svg
+[https-principle]:https://assets.set.sh/2018/180606-http-protocol/https-principle.svg
 
 ### 部署
 

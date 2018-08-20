@@ -66,7 +66,7 @@ JSON 中的地址在使用时要 v-bind 绑定，才能调用JSON 中的地址�
 设置容器元素的 font-size（该属性可被后代元素继承） 设为 0 ，再将容器内的后代元素设置正常的font-size，那么各个元素之间的空白将消失
 见 preview.gif
 
-![pa](https://raw.githubusercontent.com/lbwa/articles/master/2018/180328-summary-of-eleme-candy/preview.gif)
+![pa](https://assets.set.sh/2018/180328-summary-of-eleme-candy/preview.gif)
 
 
 若后代元素不设置 font-size ，那么后代元素的字将消失，因为在后代元素不设置 font-size 的情况下，后代元素将继承祖先元素的 font-size
