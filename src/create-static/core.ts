@@ -26,16 +26,20 @@ class CreateStatic {
     // read every markdown
     paths.map(async (singlePath: string) => {
       let contentBox: string
+      let origin: string
 
       try {
-        contentBox = await this.getContent(singlePath)
+        // 防止将 {} 解析为代码块，应该解析为对象
+        ({ origin, contentBox } = await this.getContent(singlePath))
       } catch (err) {
         console.error(err)
       }
 
+      const normalized = this.normalizeRoute(origin)
+
       this.convert({
         token: contentBox,
-        dest: path.resolve(process.cwd(), `./writings/${Date.now()}.json`),
+        dest: path.resolve(process.cwd(), `./${normalized}.json`),
         extraHeader: {
           erron: 0
         },
@@ -56,16 +60,27 @@ class CreateStatic {
     })
   }
 
-  getContent (docPath: string): Promise<string> {
+  getContent (docPath: string): Promise<{origin: string, contentBox: string}> {
     return new Promise((resolve, reject) => {
       fs.readFile(
         path.resolve(process.cwd(), `./${docPath}`),
         'utf8',
-        (err: Error, content: string) => {
-          err ? reject(err) : resolve(content)
+        (err: Error, contentBox: string) => {
+          err ? reject(err) : resolve({
+            origin: docPath,
+            contentBox
+          })
         }
       )
     })
+  }
+
+  normalizeRoute (origin: string) {
+    const removeShortDate = origin.replace(/\/{0}(\d{6}-)+/g, '')
+    const removeInitialYear = removeShortDate.replace(/^\d{4}/, '')
+    const removeRepeat = removeInitialYear.replace(/^\/\S+\//, '')
+    const removeExtension = removeRepeat.replace(/\.md$/, '')
+    return `writings/${removeExtension}`
   }
 
   convert ({
