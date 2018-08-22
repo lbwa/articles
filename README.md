@@ -4,8 +4,12 @@
 
 One of microservices based on Koa2 for my blog.
 
-## Related projects
+## Related my other projects
 
-- [docs-server] - My other project, a documentation server
+- [docs-server] - A documentation server
+
+- [mark-to-json] - A parser used to parse markdown to JSON static file
 
 [docs-server]:https://github.com/lbwa/docs-server
+
+[mark-to-json]:https://github.com/lbwa/mark-to-json
