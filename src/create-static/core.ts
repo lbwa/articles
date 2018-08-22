@@ -20,7 +20,7 @@ class CreateStatic {
       // get all markdown paths
       paths = await this.getPaths()
     } catch (err) {
-      console.error(`[Static Scanner]: ${err}`)
+      console.error(`[Static scanner error]: ${err}`)
     }
 
     // read every markdown
@@ -41,7 +41,8 @@ class CreateStatic {
         token: contentBox,
         dest: path.resolve(process.cwd(), `./${normalized}.json`),
         extraHeader: {
-          erron: 0
+          errno: 0,
+          to: normalized
         },
         contentKey: 'content'
       })
