@@ -11,6 +11,7 @@
     "ts": "npx tsc",
     "server": "node dist/index",
     "dev": "yarn run ts && pm2 start pm2.config.js",
+    "static": "yarn ts && node dist/create-static",
     "restart": "yarn run ts && pm2 restart pm2.config.js --update-env",
     "delete": "pm2 delete blog-api",
     "start": "yarn run server",
@@ -27,7 +28,8 @@
     "koa": "^2.5.2",
     "koa-compress": "^3.0.0",
     "koa-router": "^7.4.0",
-    "koa-send": "^5.0.0"
+    "koa-send": "^5.0.0",
+    "mark-to-json": "^0.1.1"
   },
   "devDependencies": {
     "@types/koa": "^2.0.46",
