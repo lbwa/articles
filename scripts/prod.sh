@@ -2,10 +2,7 @@
 
 set -e
 
-yarn clean
-yarn run ts
+rm -vrf dist/* menu.json recent-posts.json
 
-npx mocha test/http.spec.js
-now rm blog-api
-now
-now alias
+yarn static
+node dist/recent

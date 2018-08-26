@@ -16,7 +16,7 @@
     "delete": "pm2 delete blog-api",
     "start": "yarn run server",
     "commit": "sh scripts/commit.sh",
-    "now": "sh scripts/prod.sh",
+    "now": "sh scripts/now.sh",
     "clean": "rm -vrf dist/*",
     "test": "yarn run ts && npx mocha test/http.spec.js",
     "test:cover": "yarn run ts && npx istanbul cover ./node_modules/mocha/bin/_mocha"
