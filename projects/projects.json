@@ -15,6 +15,11 @@
     "desc":"一个基于 flexbox 的 CSS grid 布局实现"
   },
   {
+    "name": "mark-to-json",
+    "url": "https://github.com/lbwa/mark-to-json",
+    "desc": "将包含 yaml 头的 markdown 转换为 JSON 文件的实现"
+  },
+  {
     "name": "builder-cli",
     "url": "https://github.com/lbwa/builder-cli",
     "desc": "一个简易前端脚手架实现"
