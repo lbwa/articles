@@ -11,7 +11,7 @@
     "ts": "npx tsc",
     "server": "node dist/index",
     "dev": "yarn run ts && pm2 start pm2.config.js",
-    "static": "yarn ts && node dist/create-static",
+    "static": "yarn ts && node dist/static",
     "restart": "yarn run ts && pm2 restart pm2.config.js --update-env",
     "delete": "pm2 delete blog-api",
     "start": "yarn run server",
@@ -22,14 +22,13 @@
     "test:cover": "yarn run ts && npx istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "dependencies": {
-    "docs-server": "^1.5.0",
+    "docs-server": "^1.6.1",
     "front-matter": "^2.3.0",
     "glob": "^7.1.2",
     "koa": "^2.5.2",
     "koa-compress": "^3.0.0",
     "koa-router": "^7.4.0",
-    "koa-send": "^5.0.0",
-    "mark-to-json": "^0.1.1"
+    "koa-send": "^5.0.0"
   },
   "devDependencies": {
     "@types/koa": "^2.0.46",
