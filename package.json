@@ -11,6 +11,7 @@
     "ts": "npx tsc",
     "server": "node dist/index",
     "dev": "yarn run ts && pm2 start pm2.config.js",
+    "prod": "sh scripts/prod.sh",
     "static": "yarn ts && node dist/static",
     "restart": "yarn run ts && pm2 restart pm2.config.js --update-env",
     "delete": "pm2 delete blog-api",

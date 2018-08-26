@@ -2,7 +2,7 @@
 
 set -e
 
-rm -vrf dist/* menu.json recent-posts.json
+rm -vrf dist/* recent-posts.json
 
 yarn static
 node dist/recent
