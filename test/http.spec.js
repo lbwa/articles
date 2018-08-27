@@ -66,7 +66,7 @@ describe('Test route', () => {
       expect(responseData).to.has.property('author')
       expect(responseData).to.has.property('date')
       expect(responseData).to.has.property('tags')
-      expect(responseData).to.has.property('data')
+      expect(responseData).to.has.property('content')
       done()
     })
   })

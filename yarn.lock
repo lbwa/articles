@@ -490,9 +490,9 @@ diff@3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
 
-docs-server@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/docs-server/-/docs-server-1.6.1.tgz#ce971c567f1c5a30f2456c2af58f9ba875e935ca"
+docs-server@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/docs-server/-/docs-server-1.6.2.tgz#28eb681f4e6c72f897360bc3b0d2c0307d280bc0"
   dependencies:
     chalk "^2.4.1"
     glob "^7.1.2"
