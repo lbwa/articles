@@ -119,7 +119,7 @@ tags:
 
 [access-control-allow-headers]:https://fetch.spec.whatwg.org/#http-access-control-allow-headers
 
-[extension-cross-domain-solution]:https://set.sh//blog/writings/cross-domain-solution/#对跨域的基本理解
+[extension-cross-domain-solution]:https://set.sh/blog/writings/cross-domain-solution/#对跨域的基本理解
 
 ## Access-Control-Allow-Methods
 

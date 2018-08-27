@@ -1,5 +1,5 @@
 ---
-title:      "Vue-sonar 音乐播放器总结"
+title:      "vue-sonar 音乐播放器总结"
 date:       2018-04-18
 author:     "Bowen"
 tags:
