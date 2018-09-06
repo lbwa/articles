@@ -9,17 +9,13 @@ tags:
     - 事件循环
 ---
 
-# 事件循环 event loop
+## 事件循环定义
 
 单线程的实现方式就是事件循环（`event loop`）。
 
 存在两种 `event loops`（[W3C][event loops]），即一种在 `browsing context` 下的事件循环，一种是在 `web workers` 下的循环。本文讨论在 `browsing context` 下的事件循环。
 
-[event loops]:https://www.w3.org/TR/html5/webappapis.html#event-loop
-
-## 事件循环定义
-
-依据标准中对进程模型的流程描述（[来源][processing-model]）可得出，在完成一个宏任务，并清空因宏任务产生的微任务队列时，称之为一个事件循环。
+依据标准中对进程模型的流程描述（[来源][processing-model]）可得出，一个事件循环始终以一个宏任务（如有）开始，待 `execution context stack`  ***为空*** 时将执行 `perform a microtask checkpoint`，即执行 `microtask queue` 中的 `microtasks`。待 `microtask queue` 清空后，将进入渲染进程，此刻浏览器应该判断是否有必要进入 `repaint` 流程。经历渲染步骤之后，一个事件循环结束。
 
 ## 任务源
 
@@ -236,7 +232,9 @@ const ins = new Promise((resolve, reject) => {
 })
 
 // 4
-ins.then(() => console.log('I am from 1st ins.then()')).then(() => console.log('I am from 2nd ins.then()'))
+ins
+  .then(() => console.log('I am from 1st ins.then()'))
+  .then(() => console.log('I am from 2nd ins.then()'))
 
 // 5
 console.log('I am from script bottom')
@@ -309,7 +307,7 @@ I am from setTimeout
 
 [promise-standard]:https://promisesaplus.com/
 
-# 参考
+## 参考
 
 `JavaScript 语言精粹(修订版)`
 

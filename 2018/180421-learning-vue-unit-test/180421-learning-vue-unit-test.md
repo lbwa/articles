@@ -8,9 +8,9 @@ tags:
     - 应用测试
 ---
 
-# 关于单元测试应该了解的知识
+## 关于单元测试应该了解的知识
 
-## 测试原则
+### 测试原则
 
 首先最应该搞明白的是，我们要测什么？测试的目的是什么？
 
@@ -22,7 +22,7 @@ tags:
 
 比如，测试一个函数的功能，就看这个函数需要什么数据，然后提供测试的原始数据，之后我在调用该函数(可通过直接调用或事件触发)。断言函数的返回结果。这些就是我们的测试内容。至于该函数是如何处理数据的，并不是测试内容。
 
-## Vue.js 单元测试工具箱
+### Vue.js 单元测试工具箱
 
 1. [vue-test-utils][vue-test-utils] - 官方
 
@@ -42,9 +42,9 @@ tags:
 
 [Chai]:http://www.chaijs.com/guide/styles/#assert
 
-# 单元测试技巧
+## 单元测试技巧
 
-## 测试异步行为
+### 测试异步行为
 
 首先需要了解的是 `vue-test-utils` 是同步应用 DOM 更新的，那么在 `Mocha` 的 `expect()` 中存在异步操作且还未完成异步操作时，就可能已经调用 `expect()` 来断言了。
 
@@ -52,7 +52,7 @@ tags:
 
 `done()`实际用例：[用例一][example-done-1]，[用例二][example-done-2]
 
-## 测试异步行为的原理
+### 测试异步行为的原理
 
 结论： `done()` 保证了断言是在下一个事件循环被执行，那么在断言之前的所有异步操作均已完成。
 
@@ -62,11 +62,11 @@ tags:
 
 以上原理更多的具体分析，可点击查看我的另一篇博文——[《理解 event loop 机制》][event-loop]。
 
-## 测试键盘、鼠标及其他 DOM 事件
+### 测试键盘、鼠标及其他 DOM 事件
 
 （以官方单元测试工具为例）
 
-## 测试环境中的事件触发与监听
+### 测试环境中的事件触发与监听
 
 ```js
 it('测试点击 todo 单项事件 - refreshThisCompleted', done => {
@@ -111,7 +111,7 @@ it('刷新显示的 todo 单项 - refreshItems', () => {
 
 [dom-events]:https://vue-test-utils.vuejs.org/zh-cn/guides/dom-events.html
 
-## 测试环境中的 evt.target
+### 测试环境中的 evt.target
 
 一般情况下 `wrapper.trigger()` 可携带一个对象作为载荷，传递给监听器。但是，这个对象**不能**设置事件 evt.target 对象。原因：[点我][trigger]
 
@@ -130,7 +130,7 @@ input.trigger('click')
 
 [trigger1]:https://github.com/lbwa/vue-unit-test/blob/3fcee440f0e0511071d8f559b54b88ab23197904/test/unit/specs/LayoutContent.spec.js#L38-L50
 
-## 重要事项
+### 重要事项
 
 Vue Test Utils 是同步触发事件。因此 Vue.nextTick 不是必须的。
 
@@ -140,9 +140,9 @@ Vue Test Utils 是同步触发事件。因此 Vue.nextTick 不是必须的。
 
 [event-loop]:https://set.sh/blog/writings/event-loop/
 
-# travis CI
+## travis CI
 
-## .travis.yml 中
+### .travis.yml 中
 
 在 travis CI 集成时，调用 Chrome 的[必须选项][chrome-options]：
 
@@ -170,7 +170,7 @@ before_install:
 
 [ChromeHeadless]:https://github.com/lbwa/vue-ssr/blob/master/test/unit/karma.conf.js#L19-L23
 
-## karma.conf.js 中
+### karma.conf.js 中
 
 在 `karma.conf.js` [示例配置][karma.conf.js]中将部分配置修改如下：
 
@@ -210,7 +210,7 @@ $ cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run --br
 
 添加 `--browsers Chrome_travis_ci` 来指定在 travis CI 中的浏览器，因为我们在 [karma.conf.js][karma.conf.js] 中定义了 `customLaunchers` ，那么此时启动的**浏览器及其模式**将会**匹配**我们定义的 `customLaunchers` 项。
 
-# 参考
+## 参考
 
 [vue-test-utils 高级技巧][vue-test-utils 高级技巧]
 

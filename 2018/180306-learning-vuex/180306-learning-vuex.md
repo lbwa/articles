@@ -8,13 +8,13 @@ tags:
     - Vue.js
 ---
 
-# 核心概念
+## 核心概念
 
 vuex 就是将 vue 中需要管理的状态，全部集中到一个容器中，集中管理。下文代码中 store 指代 vuex 容器实例（`const store = new Vuex.Store({ ... })`），同时在组件中可使用`this.$store`来访问 vuex 容器实例。注意，在通过`this.$store`来访问各个选项时，选项名末尾除state外，都必须有`s`。
 
 Vuex 通过 store 选项，提供了一种机制将状态从根组件"注入"到每一个子组件中（需调用`Vuex.use(Vuex)`）。通过在**根实例**中注册`store`选项，该 store 实例会注入到根组件下的**所有**子组件中，且子组件可以通过`this.$store`访问到。
 
-## state —— 存储状态的容器
+### state —— 存储状态的容器
 
 state 用于缓存状态（计算属性）数据。可**类比**于 vue 实例中的 data 数据对象。
 
@@ -31,7 +31,7 @@ computed: {
 但是，一般的用法是，通过**store选项**注入到 vue 组件中。
 2. [mapState 辅助函数][mapState]用于读取多个状态，生成计算属性（状态）
 
-## getter —— 处理旧状态生成新状态
+### getter —— 处理旧状态生成新状态
 
 getter 可**类比** vue 实例中的 computed 选项，可称为是 store 的计算属性。读取 state 中的数据A，经 getter 中的处理函数处理后返回生成一个新的状态数据B（A的计算属性）。
 
@@ -93,9 +93,9 @@ export default {
 
 ```
 
-## Mutation —— 修改旧状态
+### Mutation —— 修改旧状态
 
-### 含义及作用
+#### 含义及作用
 
 更改 vuex 的 store 中的状态的**唯一方法**是提交 mutation。可**类比**vue中的事件，提交 mutation **类比**触发事件(this.$emit(‘事件名’))。
 
@@ -103,7 +103,7 @@ export default {
 
 这种 mutation 中定义事件类型和回调函数的方式**可看作**是自定义事件注册。但**不能直接调用** mutation 中的回调函数。
 
-### 使用方法
+#### 使用方法
 
 不能直接调用 mutation handler，可类比调用`this.$emit`方法触发某自定义事件。那么，使用 mutation handler 的方法如下：
 
@@ -148,14 +148,14 @@ export default {
 }
 ```
 
-### 注意事项
+#### 注意事项
 
 1. mutations 选项中的方法是不分组件的 , 假如你在 A.js 文件中的定义了
 fn 方法 , 在其他文件（B.js等等）中的一个 fn 方法 , 那么
 $store.commit('fn') 会**执行所有**的 fn 方法。
 1. mutations 选项中的操作**必须是同步**的。
 
-## Action —— 可包含异步的“Mutation”
+### Action —— 可包含异步的“Mutation”
 
 action 与 mutation 根本作用都是修改状态，不同之处在于：
 1. action 提交的是 mutation，而不是直接修改状态
@@ -206,7 +206,7 @@ actions: {
 }
 ```
 
-### 分发 action
+#### 分发 action
 
 action 通过`store.dispatch`方法触发分发。
 
@@ -244,7 +244,7 @@ export default {
 }
 ```
 
-### 组合 action
+#### 组合 action
 
 前文提到，action 对象内部可执行异步操作，那么如何知道其对象内部的处理函数何时执行结束？
 因为只有知道执行结束才能组合其他 action 中的处理函数，用于处理复杂的异步情况。
@@ -296,11 +296,11 @@ actions: {
 }
 ```
 
-## module —— 将 store 分割成模块
+### module —— 将 store 分割成模块
 
 每个模块可拥有自己的 store 容器，其中包含属于自己模块的 state、mutation、action、getter。store 容器中可使用 module 选项来**包含其他模块的 store 容器**。
 
-### 模块内的局部状态
+#### 模块内的局部状态
 
 对于模块内部的 mutation 和 getter，接收的第一个参数是模块的**局部状态对象**。
 
@@ -346,7 +346,7 @@ const moduleA = {
 }
 ```
 
-### 命名空间
+#### 命名空间
 
 默认情况下，模块内部的 action、mutation 和 getter 是注册在**全局**命名空间的。
 
@@ -395,7 +395,7 @@ this.getSomeState()
 
 设置命名空间的好处是，可在不同的模块之间取**同名**的 `mutations` 等函数而不会冲突，它们也会获取自己命名空间的 `state`。
 
-#### 命名空间内访问全局内容
+##### 命名空间内访问全局内容
 
 特别地，在命名空间内，`rootState` 和 `rootGetters` 将作为**第三**和**第四**参数传入 `mutations`，在 `actions` 中作为 `context` 的属性传入，那么可在命名空间内调用 `rootState` 和 `rootGetters` 得到全局的 `state` 和 `getters`。
 
@@ -429,7 +429,7 @@ new Vuex.Store({
 })
 ```
 
-#### 命名空间内注册全局 action
+##### 命名空间内注册全局 action
 
 在注册时，添加 `root: true` 选项。
 
@@ -443,7 +443,7 @@ new Vuex.Store({
       actions: {
         getMoreState: {
           root: true,
-          // context 包含了命名空间的所有 state, getters, mutations, actions, 
+          // context 包含了命名空间的所有 state, getters, mutations, actions,
           // dispatch, commit, rootState, rootGetters
           handler (context) {
             // ...
@@ -456,7 +456,7 @@ new Vuex.Store({
 })
 ```
 
-#### 兄弟命名空间调用
+##### 兄弟命名空间调用
 
 ```js
 new Vuex.Store({
