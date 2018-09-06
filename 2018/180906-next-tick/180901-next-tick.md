@@ -1,13 +1,10 @@
 ---
 title:  "Vue.js 的 nextTick 实现"
-date:  2018-09-06
-author:  "Bowen"
+date:   2018-09-06
+author: "Bowen"
 tags:
-
--  前端开发
-
--  事件循环
-
+    - 前端开发
+    - 事件循环
 ---
 
 `Vue.js` 中的 `nextTick` 函数核心原理是基于 [W3C] 或 [HTML living standard][event loop processing model] 中的 `event loop processing model` 模型的实现。
