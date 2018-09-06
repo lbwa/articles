@@ -161,7 +161,7 @@ if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
 }
 ```
 
-代码中首先检测当前执行环境是否支持 `setImmediate`（仅有 `IE` 和 `Node.js` 实现），在不支持 `setImmediate` 的情况下降级使用 `MessageChannel` 做为备用的 `macrotask` 实现。
+代码中首先检测当前执行环境是否支持 [setImmediate]（仅有 `IE` 和 `Node.js` 实现），在不支持 [setImmediate] 的情况下降级使用 [MessageChannel] 做为备用的 `macrotask` 实现。
 
 ```js
 const channel = new MessageChannel()
@@ -183,7 +183,11 @@ API [MessageChannel] 本身是用于不同的 `browsing contexts` 之间通信�
 
 [ls-mc]:https://html.spec.whatwg.org/multipage/web-messaging.html#port-message-queue
 
-在同时不支持 `setImmediate` 和 `MessageChannel` 中的执行环境中，将使用最后的 `macrotask` 备选实现 `setTimeout(fn, 0)`。这里要注意的是 `setTimeout(fn, 0)` 并不会向国内很多人认为的那样会直接无前提的设置最小时限 `4ms`，在 [HTML living standard][HTML living standard-timer] 和 [W3C][W3C-timer] 中查阅 `timer` 章节均只有当 `timer` 算法嵌套层级超越 5 层，且此时的 `timeout` 小于 `4ms` 时，才会将 `timeout` 提升至 `4ms`。进一步可理解为 `setInterval` 的最小时限为 `4ms`。
+在同时不支持 [setImmediate] 和 [MessageChannel] 中的执行环境中，将使用最后的 `macrotask` 备选实现 `setTimeout(fn, 0)`。这里要注意的是 `setTimeout(fn, 0)` 并不会向国内很多人认为的那样会直接无前提的设置最小时限 `4ms`，在 [HTML living standard][HTML living standard-timer] 和 [W3C][W3C-timer] 中查阅 `timer` 章节均只有当 `timer` 算法嵌套层级超越 5 层，且此时的 `timeout` 小于 `4ms` 时，才会将 `timeout` 提升至 `4ms`。进一步可理解为 `setInterval` 的最小时限为 `4ms`。
+
+在整个实现 `macroTimerFunc` 的过程中，使得 [setImmediate] 作为第一选择而不是 `setTimeout` 是因为 [setImmediate] 不需要设置计时器，在性能上优于 `setTimeout`。
+
+[setImmediate]:https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
 
 [HTML living standard-timer]:https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timer-initialisation-steps
 
