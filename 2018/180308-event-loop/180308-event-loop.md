@@ -17,6 +17,8 @@ tags:
 
 依据标准中对进程模型的流程描述（[来源][processing-model]）可得出，一个事件循环始终以一个宏任务（如有）开始，待 `execution context stack`  ***为空*** 时将执行 `perform a microtask checkpoint`，即执行 `microtask queue` 中的 `microtasks`。待 `microtask queue` 清空后，将进入渲染进程，此刻浏览器应该判断是否有必要进入 `repaint` 流程。经历渲染步骤之后，一个事件循环结束。
 
+[event loops]:https://www.w3.org/TR/html5/webappapis.html#event-loops
+
 ## 任务源
 
 - 宏任务（macrotask）：
