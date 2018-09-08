@@ -262,7 +262,7 @@ created () {
 在示例代码执行后，此时的 `callbacks` 为 `[fn1]`，那么此时 `execution context stack` 为
 
 ```js
-// execution context stack
+// execution context stack（抽象 `stack` 数据结构如下）
 [console.log('I am outer !')] // 输出 'I am outer !'，此时 callbacks 已经重置为 []
 [flushCallbacks] // 包含执行 console.log 和 this.$nextTick(fn2) 的执行语句
 ```
@@ -270,7 +270,7 @@ created () {
 根据规范的 `event loop processing model` 模型（[W3C][w3c-el] 和 [HTML living standard][ls-el]），在执行当前 `microtask` 时，`microtask` 仍存在于 `microtask queue` 中，直到 `microtask` 从 `execution context stack` 中移除，`microtask` 才会从 `microtask queue` 中移除。那么此时的 `microtask queue` 为：
 
 ```js
-// microtask queue
+// microtask queue（抽象 `queue` 数据结构如下）
 [flushCallbacks]
 ```
 
@@ -281,7 +281,7 @@ created () {
 继续执行代码，此时 `execution context stack` 变为：
 
 ```js
-// execution context stack
+// execution context stack（抽象 `stack` 数据结构如下）
 [this.$nextTick(fn2)] // 向 callbacks 中添加 fn2 函数，此时 callbacks 为 [fn2]
 [flushCallbacks] // from microtask queue
 ```
@@ -289,14 +289,14 @@ created () {
 此时的 `microtask queue` 仍然为：
 
 ```js
-// microtask queue
+// microtask queue（抽象 `queue` 数据结构如下）
 [flushCallbacks]
 ```
 
 继续执行代码，此时 `execution context stack` 变为：
 
 ```js
-// execution context stack
+// execution context stack（抽象 `stack` 数据结构如下）
 [microTimerFunc] // 即添加另外一个 microtask 到 microtask queue 中，即 flushCallbacks
 [this.$nextTick(fn2)]
 [flushCallbacks]
@@ -305,9 +305,8 @@ created () {
 此时的 `microtask queue` 将变为：
 
 ```js
-// microtask queue
-[flushCallbacks]
-[flushCallbacks]
+// microtask queue（抽象 `queue` 数据结构如下）
+[flushCallbacks][flushCallbacks]
 ```
 
 这里我们可以首先从 `nextTick` 的设计角度来看，在 `nextTick` 中嵌套调用 `nextTick` 时，总是应该在另外一个 `microtask` 中执行传入嵌套的 `nextTick` 的 `cb` 函数。这也就时上文对 `nextTick` 的嵌套调用的执行分析。
