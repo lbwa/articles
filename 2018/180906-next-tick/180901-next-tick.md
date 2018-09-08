@@ -314,7 +314,7 @@ created () {
 
 更深层次地，为什么需要新建一个 `microtask`？因为这是为了统一整体 `nextTick` 的设计思路，在非嵌套调用 `nextTick` 时，`nextTick` 就是通过新建一个 `microtask` 来实现 `cb` 函数的有序调用。那么在存在嵌套调用的情况下，内部嵌套调用的 `nextTick` 函数也应该新建一个 `microtask` 来实现自己的 `cb` 函数有序调用。
 
-解析完 `nextTick` 的嵌套调用，回到 `为什么使用 callbacks 副本循环迭代？且在迭代前重置 callbacks 容器` 的问题上。结合上文所解析的 `nextTick` 嵌套调用，若不使用副本，并在循环前重置 `callbacks` 容器，那么在内部的嵌套函数 `nextTick` 的 `callbacks` 容器中将存在之前外部的 `callbacks` 容器的 `cb` 函数。那么外部 `callbacks` 容器中的 `cb` 函数将出现重复调用。所以必须使用副本循环迭代执行 `cb` 函数，并在循环迭代前重置 `callbacks` 容器，这样在执行内部嵌套的 `nextTick` 函数时，将使用一个重置状态的 `callbacks` 容器。
+解析完 `nextTick` 的嵌套调用，回到 `为什么使用 callbacks 副本循环迭代？且在迭代前重置 callbacks 容器` 的问题上。结合上文所解析的 `nextTick` 嵌套调用，使用副本的最根本的原因是 `callbacks` 是引用类型值，若在嵌套的 `nextTick` 中共用外部 `nextTick` 的 `callbacks` 容器，那么将导致在内部的嵌套函数 `nextTick` 的 `callbacks` 容器中将存在之前外部的 `callbacks` 容器的 `cb` 函数。那么外部 `callbacks` 容器中的 `cb` 函数将出现重复调用。所以，就必须使用副本循环迭代执行 `cb` 函数，并在循环迭代前重置 `callbacks` 容器，这样无论在什么样的情况下执行 `nextTick` 函数时，都将使用一个重置状态的 `callbacks` 容器。另外，在循环之前保证 `callback` 为空，是为了保证在循环迭代时出现 `this.$nextTick` 嵌套调用时，不影响该嵌套函数的调用，此时当前外部 `nextTick` 所需的容器已经通过浅复制保存了下来，这样既不影响外部 `nextTick` 循环也不影响内部嵌套调用自身的循环调用队列。
 
 ## 返回一个 Promise 对象
 
