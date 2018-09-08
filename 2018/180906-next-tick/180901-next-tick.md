@@ -314,7 +314,9 @@ created () {
 
 更深层次地，为什么需要新建一个 `microtask`？因为这是为了统一整体 `nextTick` 的设计思路，在非嵌套调用 `nextTick` 时，`nextTick` 就是通过新建一个 `microtask` 来实现 `cb` 函数的有序调用。那么在存在嵌套调用的情况下，内部嵌套调用的 `nextTick` 函数也应该新建一个 `microtask` 来实现自己的 `cb` 函数有序调用。
 
-解析完 `nextTick` 的嵌套调用，回到 `为什么使用 callbacks 副本循环迭代？且在迭代前重置 callbacks 容器` 的问题上。结合上文所解析的 `nextTick` 嵌套调用，使用副本的最根本的原因是 `callbacks` 是引用类型值，若在嵌套的 `nextTick` 中共用外部 `nextTick` 的 `callbacks` 容器，那么将导致在内部的嵌套函数 `nextTick` 的 `callbacks` 容器中将存在之前外部的 `callbacks` 容器的 `cb` 函数。那么外部 `callbacks` 容器中的 `cb` 函数将出现重复调用。所以，就必须使用副本循环迭代执行 `cb` 函数，并在循环迭代前重置 `callbacks` 容器，这样无论在什么样的情况下执行 `nextTick` 函数时，都将使用一个重置状态的 `callbacks` 容器。另外，在循环之前保证 `callback` 为空，是为了保证在循环迭代时出现 `this.$nextTick` 嵌套调用时，不影响该嵌套函数的调用，此时当前外部 `nextTick` 所需的容器已经通过浅复制保存了下来，这样既不影响外部 `nextTick` 循环也不影响内部嵌套调用自身的循环调用队列。
+解析完 `nextTick` 的嵌套调用，回到 `为什么使用 callbacks 副本循环迭代？且在迭代前重置 callbacks 容器` 的问题上。结合上文所解析的 `nextTick` 嵌套调用，使用副本的最根本的原因是 `callbacks` 是引用类型值，若在嵌套的 `nextTick` 中共用外部 `nextTick` 的 `callbacks` 容器，那么将导致在内部的嵌套函数 `nextTick` 的 `callbacks` 容器中将存在之前外部的 `callbacks` 容器的 `cb` 函数（此时还在循环迭代 `callbacks` 各项 `cb` 函数的过程中，无法做到重置 `callbacks` 容器）。那么外部 `callbacks` 容器中的 `cb` 函数将出现重复调用。所以，就必须使用副本循环迭代执行 `cb` 函数，并在循环迭代前重置 `callbacks` 容器，这样无论在什么样的情况下执行 `nextTick` 函数时，都将使用一个重置状态的 `callbacks` 容器。
+
+另外，在循环之前保证 `callback` 为空，是为了保证在循环迭代时出现 `this.$nextTick` 嵌套调用时，不影响该嵌套函数的 `callbacks` 使用，此时当前外部 `nextTick` 所需的`callbacks` 执行容器已经通过浅复制保存了下来，这样就达到既不影响外部 `nextTick` 使用 `callbacks` 容器也不影响内部嵌套 `nextTick` 使用 `callbacks` 容器的目的。
 
 ## 返回一个 Promise 对象
 
@@ -353,6 +355,6 @@ export function nextTick (cb?: Function, ctx?: object) {
 }
 ```
 
-在未向 `nextTick` 函数传入一个参数时，将触发实例化一个 `Promise` 对象，并在实例化过程中缓存内部 `resolve` 函数，并添加至 `callbacks` 容器中。那么在执行 `callbacks` 容器时，将执行之前缓存的 `resolve` 函数，从而 `resolve` 之间的 `Promise` 实例化对象。进而在未传入参数的情况下返回一个 `Promise` 对象。
+在未向 `nextTick` 函数传入一个参数时，将触发实例化一个 `Promise` 对象，并在实例化过程中缓存内部 `resolve` 函数，并添加至 `callbacks` 容器中。那么在执行 `callbacks` 容器时，将执行之前缓存的 `resolve` 函数，从而 `resolve` 之间的 `Promise` 实例化对象（因为函数是引用类型值，即执行的是同一个函数）。进而在未传入参数的情况下返回一个 `Promise` 对象。
 
 [文档]:https://cn.vuejs.org/v2/api/#Vue-nextTick
