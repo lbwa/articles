@@ -5,6 +5,11 @@
     "desc":"一个用于自动构建 static server 的 Node.js 实现"
   },
   {
+    "name": "vue-lazing",
+    "url": "https://github.com/lbwa/vue-lazing",
+    "desc": "基于 IntersectionObserver 实现的 Vue.js 懒加载组件"
+  },
+  {
     "name": "better-jsonp",
     "url": "https://github.com/lbwa/jsonp",
     "desc": "一个轻量化的 JSONP 实现"
