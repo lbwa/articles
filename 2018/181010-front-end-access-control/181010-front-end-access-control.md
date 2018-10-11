@@ -80,3 +80,27 @@ router.beforeEach((to, from, next) => {
 ```
 
 ## 注销后的全局路由表重置
+
+```js
+// login/actions.js
+
+export default {
+  // replace 为编程式导航方法，即 router.replace
+  // eg. 在 SFC 中以 this.$store.dispatch(
+  //  'login/logout',
+  // this.$router.replace.bind(this.$router)) 的形式调用
+  logout ({}, replace) {
+    removeTokenFromLocal()
+
+    // 切换至登陆页
+    replace('/login')
+
+    // vue-router v3.0.1 仅支持动态添加路由方法 addRoutes，并不支持删除路由信息
+    location.reload()
+  }
+}
+```
+
+值得注意的是，在当前 `vue-router` 版本 `v3.0.1` 中，并未支持动态删除路由。那么要在当前 `tab` 中实现删除路由就必须实现重置全局 `routes map`。另外在用户注销时，需要一并重置本地存储与临时存储（如 `vuex`）。那么，最终用户注销的实现是在调用编程式导航方法 `replace` 切换至目标页之后，调用 `location.reload()`实现全局 `routes map` 与全局状态重置。
+
+另外，若在当前 `APP` 中使用 `sessionStorage` 来存储用户的 `token` 时，需要注意在同一 `tab` 中刷新页面时，不会清空 `sessionStorage`。那么也就是说当调用 `location.reload()` 时，并不会清空本地存储 `sessionStorage`。那么此时需要手动清除 `sessionStorage`。
