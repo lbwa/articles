@@ -71,12 +71,161 @@ router.beforeEach((to, from, next) => {
 })
 ```
 
-## 动态渲染路由列表
-
-## 响应数据的动态路由表的前端渲染
+## 响应数据的动态路由表的合并
 
 ```js
-// actions createExtraRoutes 和 createGlobalRoutes 的实现
+const ADMINISTRATOR = 'admin'
+
+export default {
+  /**
+   * @description 根据服务端响应的 access 来过滤前端动态路由表
+   * @param {String[]} role 服务端响应的当前用户 access
+   */
+  createExtraRoutes ({ commit }, role) {
+    // 在当前用户获得 `admin` 时，将默认获取所有的私有动态路由，即跳过动态路由过滤
+    const globalRoutes = role.includes(ADMINISTRATOR)
+      ? dynamicRoutes
+      : filterRoutes(dynamicRoutes, role)
+
+    // SET_ROUTES is a mutation type in module `login`
+    // 临时存储当前用户最终路由表，将用于前端 UI 列表渲染
+    commit('SET_ROUTES', globalRoutes)
+  },
+  createGlobalRoutes ({ commit, dispatch, getters }, role) {}
+}
+
+/**
+ * @param {Object[]} routes 路由表
+ * @param {String[]} role 服务端响应的当前用户 access
+ */
+function filterRoutes (routes, role) {
+  const formatRoutes = []
+  routes.forEach(route => {
+    // 使用副本传递，而非引用，避免引用同一路由对象
+    const routeCopy = { ...route }
+    if (hasAccess(route, role)) {
+      if (route.children && route.children.length !== 0) {
+        routeCopy.children = filterRoutes(routeCopy.children, role)
+      }
+      formatRoutes.push(routeCopy)
+    }
+  })
+}
+
+/**
+ * @param {Object} route 单个路由
+ * @param {String[]} role 服务端响应的当前用户 access
+ */
+function hasAccess (route, role) {
+  // 当在预设默认动态路由表中不存在 meta.role 设置时，将默认为对所有权限开放
+  return role.meta && Array.isArray(role.meta.role)
+    ? role.some(item => route.meta.role.includes(item))
+    : true
+}
+```
+
+## 动态渲染路由列表
+
+在经过上节的路由表合并之后，将结果路由表存储在 `store.state.login.routes` 中。在递归组件中注入 `routes` 路由表，即可实现动态渲染出动态 `aside menu`。
+
+循环生成多个递归组件，通过 `props` 注入向单个递归组件注入对应单个 `route` ，以实现递归渲染子列表。
+
+```html
+<!-- Aside.vue -->
+<template>
+  <!-- 只列出关键 props -->
+  <el-menu
+    :router="true"
+  >
+    <recursive-list
+      v-for="route of routes"
+      :key="route.path"
+      :route="route"
+      :basic-route="route.path"
+    ></recursive-list>
+  </el-menu>
+</template>
+
+<script>
+import RecursiveList from '@/RecursiveList'
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('login', [
+      'routes'
+    ])
+  }
+}
+</script>
+```
+
+在递归组件内部实现以下递归渲染逻辑：
+
+```html
+<template>
+  <!-- meta.hidden 用于自定义需要排除渲染的列表项 -->
+  <div class="list-item__wrapper" v-if="!route.meta.hidden">
+    <template v-if="!route.children">
+      <el-menu-item
+        :index="resolvePath(route.path)"
+      >{{route.meta.title}}</el-menu-item>
+    </template>
+
+    <el-submenu v-else :index="route.path">
+      <!-- 菜单名 -->
+      <template slot="title">
+        <i class="el-icon-menu"></i>
+        <span slot="title">{{route.meta.title}}</span>
+      </template>
+
+      <!-- 递归模板，核心 -->
+      <template v-for="child of route.children">
+      <!-- 当子路由存在子路由时，递归组件 -->
+        <recursive-list
+          :key="child.path"
+          v-if="child.children"
+          :route="child"
+          :basic-route="resolvePath(child.path)"
+        />
+        <el-menu-item
+          v-else
+          :key="child.path"
+          :index="resolvePath(child.path)"
+        >{{child.meta.title}}</el-menu-item>
+      </template>
+    </el-submenu>
+  </div>
+</template>
+
+<script>
+// SFC 经 webpack 编译，那么可传入 node 编译环境中的 path 来作为工具函数
+import path from 'path'
+
+export default {
+  // name 用于递归调用
+  name: 'recursive-list',
+
+  props: {
+    route: {
+      type: Object,
+      required: true
+    },
+
+    // 用于传递给子组件，拼接子路由
+    basicRoute: {
+      type: String,
+      default: ''
+    }
+  },
+
+  methods: {
+    resolvePath (target) {
+      return path.resolve(this.basicRoute, target)
+    }
+  }
+}
+</script>
 ```
 
 ## 注销后的全局路由表重置
