@@ -1,5 +1,10 @@
 [
   {
+    "name": "vue-design-pro",
+    "url": "https://github.com/lbwa/vue-design-pro",
+    "desc": "ant design pro 的 Vue.js 实现，另外拓展实现了前端路由权限控制"
+  },
+  {
     "name":"docs-server",
     "url":"https://github.com/lbwa/docs-server",
     "desc":"一个用于自动构建 static server 的 Node.js 实现"
