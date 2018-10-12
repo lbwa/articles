@@ -74,6 +74,7 @@ router.beforeEach((to, from, next) => {
 ## 响应数据的动态路由表的合并
 
 ```js
+import router from 'ROUTER' // ROUTER is an alias name
 const ADMINISTRATOR = 'admin'
 
 export default {
@@ -83,15 +84,23 @@ export default {
    */
   createExtraRoutes ({ commit }, role) {
     // 在当前用户获得 `admin` 时，将默认获取所有的私有动态路由，即跳过动态路由过滤
-    const globalRoutes = role.includes(ADMINISTRATOR)
+    const addRoutes = role.includes(ADMINISTRATOR)
       ? dynamicRoutes
       : filterRoutes(dynamicRoutes, role)
 
-    // SET_ROUTES is a mutation type in module `login`
-    // 临时存储当前用户最终路由表，将用于前端 UI 列表渲染
-    commit('SET_ROUTES', globalRoutes)
+    commit('SET_ADD_ROUTES', addRoutes)
   },
-  createGlobalRoutes ({ commit, dispatch, getters }, role) {}
+  createGlobalRoutes ({ commit, dispatch }, addRoutes) {
+    // SET_ROUTES is a mutation type in module `login`
+    /**
+     * 1. 将过滤后的 addRoutes 与静态公有路由表合并为全局的最终路由表
+     * 2. SET_ROUTES mutation 将在当前会话中临时存储动态的私有路由表 addRoutes 和
+     * 全局最终的路由表 routes，全局的 routes 将用于递归组件的 UI 渲染，addRoutes 将
+     * 用于传入 router.addRoutes 添加路由
+     */
+    commit('SET_ROUTES', addRoutes)
+    router.addRoutes(addRoutes)
+  }
 }
 
 /**
@@ -124,9 +133,11 @@ function hasAccess (route, role) {
 }
 ```
 
+在前端路由的全局前置导航守卫 `createExtraRoutes` 被调用时，将过滤当前用户的私有列表，并相继调用创建全局最终路由表的 `createGlobalRoutes` 的 `actions` 得到最终的全局路由表 `routes` 和私有列表 `addRoutes`。在前端路由中 `vue-router` 在初始化路由实例之后，支持通过调用实例方法 `router.addRoutes` 来向当前路由表添加私有列表 `addRoutes`。而之前合并生成的的全局路由表此时也与路由实例中的路由表保持了同步，并且此时临时存储在 `vuex` 中的全局路由表在后续将被递归组件调用，形成动态的路由列表渲染。
+
 ## 动态渲染路由列表
 
-在经过上节的路由表合并之后，将结果路由表存储在 `store.state.login.routes` 中。在递归组件中注入 `routes` 路由表，即可实现动态渲染出动态 `aside menu`。
+在经过上节的路由表合并之后，将结果路由表存储在 `store.state.login.routes` 中。在多个递归组件中注入 `routes` 路由表的单项，即可实现动态渲染出动态 `aside menu`。
 
 循环生成多个递归组件，通过 `props` 注入向单个递归组件注入对应单个 `route` ，以实现递归渲染子列表。
 
