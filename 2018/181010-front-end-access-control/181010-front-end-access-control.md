@@ -1,5 +1,5 @@
 ---
-title:  "权限控制的实现"
+title:  "前端权限控制的基本实现"
 date:   2018-10-10
 author: "Bowen"
 tags:
@@ -27,7 +27,7 @@ tags:
 ## 权限控制的基本实现
 
 ```js
-import commonRoutes from 'ROUTER/routes/common'
+import commonRoutes from 'ROUTER/routes/common' // ROUTER is an alias name
 const LOGIN_PATH = '/login'
 
 // 前端路由的全局前置导航守卫
@@ -54,7 +54,11 @@ router.beforeEach((to, from, next) => {
         // 借助 router.addRoutes(store.state.login.routes) 实现动态添加路由表
         .then(() => store.dispatch(
           'login/createGlobalRoutes',
-          store.getter['login/addRoutes']
+          // 消除函数副作用，显式地传入依赖
+          {
+            addRoutes: store.getter['login/addRoutes'],
+            router
+          },
         ))
         .catch(console.error)
 
@@ -74,7 +78,6 @@ router.beforeEach((to, from, next) => {
 ## 响应数据的动态路由表的合并
 
 ```js
-import router from 'ROUTER' // ROUTER is an alias name
 const ADMINISTRATOR = 'admin'
 
 export default {
@@ -90,7 +93,7 @@ export default {
 
     commit('SET_ADD_ROUTES', addRoutes)
   },
-  createGlobalRoutes ({ commit, dispatch }, addRoutes) {
+  createGlobalRoutes ({ commit, dispatch }, { addRoutes, router }) {
     // SET_ROUTES is a mutation type in module `login`
     /**
      * 1. 将过滤后的 addRoutes 与静态公有路由表合并为全局的最终路由表
@@ -133,7 +136,7 @@ function hasAccess (route, role) {
 }
 ```
 
-在前端路由的全局前置导航守卫 `createExtraRoutes` 被调用时，将过滤当前用户的私有列表，并相继调用创建全局最终路由表的 `createGlobalRoutes` 的 `actions` 得到最终的全局路由表 `routes` 和私有列表 `addRoutes`。在前端路由中 `vue-router` 在初始化路由实例之后，支持通过调用实例方法 `router.addRoutes` 来向当前路由表添加私有列表 `addRoutes`。而之前合并生成的的全局路由表此时也与路由实例中的路由表保持了同步，并且此时临时存储在 `vuex` 中的全局路由表在后续将被递归组件调用，形成动态的路由列表渲染。
+在前端路由的全局前置导航守卫 `createExtraRoutes` 被调用时，将过滤当前用户的私有列表，并相继调用创建全局最终路由表的 `createGlobalRoutes` 的 `actions` 得到最终的全局路由表 `routes` 和私有列表 `addRoutes`。在前端路由中，`vue-router` 在初始化路由实例之后，支持通过调用实例方法 `router.addRoutes` 来向当前路由表添加私有列表 `addRoutes`。而之前合并生成的的全局路由表此时就与路由实例中的路由表保持了 ***同步***。而此时临时存储在 `vuex` 中的全局路由表将在后续被递归组件调用，实现动态地路由列表渲染。
 
 ## 动态渲染路由列表
 
@@ -264,3 +267,7 @@ export default {
 值得注意的是，在当前 `vue-router` 版本 `v3.0.1` 中，并未支持动态删除路由。那么要在当前 `tab` 中实现删除路由就必须实现重置全局 `routes map`。另外在用户注销时，需要一并重置本地存储与临时存储（如 `vuex`）。那么，最终用户注销的实现是在调用编程式导航方法 `replace` 切换至目标页之后，调用 `location.reload()`实现全局 `routes map` 与全局状态重置。
 
 另外，若在当前 `APP` 中使用 `sessionStorage` 来存储用户的 `token` 时，需要注意在同一 `tab` 中刷新页面时，不会清空 `sessionStorage`。那么也就是说当调用 `location.reload()` 时，并不会清空本地存储 `sessionStorage`。那么此时需要手动清除 `sessionStorage`。
+
+## 总结
+
+至此，以上是实现中台应用中前端的权限管理的一种方式。最为核心的地方即是实现公有路由表与私有路由表的合并，即根据当前用户的 `token` 验证得到用户的 `access`，在根据 `access` 得到最终用户可访问的路由。后续，将最终的路由用户路由列表递归渲染，而过滤得到的私有路由则因通过路由实例的 `addRoutes` 方法添加到现有的路由表中，以实现私有路由的切换。
